@@ -31,7 +31,7 @@ You submit a request to the root URL
 To retrieve a list of all genres, you would therefore submit a ``GET`` request to
 ``/genres/``. To access information about a particular genre, say genre
 25, submit a request to ``/genres/25/``. On a different deployment, or
-with a different implementation or version of the CANTUS server, the URL path may be entirely
+with a different implementation or version of the Cantus server, the URL path may be entirely
 different. However, if ``"browse_genres"`` appears in the ``"resources"`` member of a response, it
 will always point to the list of genres, and substituting a value for ``{id}`` will always give
 information related to a specific genre.
@@ -73,15 +73,15 @@ You submit a query about "Benedicamus patrem et filium" chants:
         }
     }
 
-While the CANTUS server has cached some metadata about all the chants, you can see from the privded
+While the Cantus server has cached some metadata about all the chants, you can see from the privded
 URLs that resource ``"pem-8669"`` is actually hosted on the Portuguese Early Music server, and we
 refer the client to that URL for further information. Note also that the "id" field is not
-consistent between the two servers: in this case, the ``uwaterloo.ca`` CANTUS server has prefixed
+consistent between the two servers: in this case, the ``uwaterloo.ca`` Cantus server has prefixed
 the ``pemdatabase.eu`` server's "id" with ``"pem-"`` to avoid a resource "id" conflict.
 
-As a reminder, the CANTUS server will only "switch out" a resource provider like this when it is
+As a reminder, the Cantus server will only "switch out" a resource provider like this when it is
 API-compatible, so this "resources" URL represents a promise that the PEM server supports the
-CANTUS API. For more information, refer to :ref:`multiserver`.
+Cantus API. For more information, refer to :ref:`multiserver`.
 
 .. _`resource ids`:
 
@@ -89,7 +89,7 @@ About the "id" Field
 --------------------
 
 In resource types for which ``{id}`` makes up part of the URL, you would form the URI for a specific
-resource by substituting that resource's unique "id" value in that part of the URL. CANTUS "id"
+resource by substituting that resource's unique "id" value in that part of the URL. Cantus "id"
 values may consist of any alphanumeric character valid in a URL, plus hyphen or underscore.
 
 The following points also apply:
@@ -99,7 +99,7 @@ The following points also apply:
 - A resource's "id" field may be prefixed with an identifier indicating which database the holds the
   resources's authoritative copy.
 - The same "id" may or may not refer to "the same" resource when served by a different deployment of
-  a CANTUS server application. That is, the CANTUS API does not guarantee uniqueness of "id" values
+  a Cantus server application. That is, the Cantus API does not guarantee uniqueness of "id" values
   across deployments.
 
 Simple Record Types
@@ -144,6 +144,14 @@ discover the valid ``"id"`` values by visiting the generic URL (e.g., by visitin
 | Source status        | ``"browse_source_statii"`` |
 +----------------------+----------------------------+
 
+Notes
+^^^^^
+
+- Every "genre" also has a "mass_or_office" field in the Solr database.
+- Every "feast" also has a "date" though sometimes it's empty
+- for "feast" the "id" is Drupal's "feastcode" and "drupal_id" is Drupal's node ID
+- for "siglum" the "id" is that of the corresponding Source
+
 .. _`complex record types`:
 
 Complex Record Types
@@ -153,9 +161,9 @@ The following resource types (CantusID, Chant, Indexer, Source) hold many fields
 some of which correspond to a "taxonomy" field given in the previous section.
 
 For the matrices in this section, "Field Name in MySQL" indicates the name of the field in the
-CANTUS Drupal MySQL database; "Field Name in Drupal" indicates the name of the field as displayed
-in the CANTUS Drupal user interface; "Field Name in JSON" is the member name of this data as
-delivered in the CANTUS API; ``"resources"`` indicates whether a hyperlink to more information
+Cantus Drupal MySQL database; "Field Name in Drupal" indicates the name of the field as displayed
+in the Cantus Drupal user interface; "Field Name in JSON" is the member name of this data as
+delivered in the Cantus API; ``"resources"`` indicates whether a hyperlink to more information
 about that field's value *may* be included with a JSON response. Refer to the `Request and Response
 Bodies <response bodies>`_ section for more information on how to make this bit work right.
 
@@ -169,8 +177,9 @@ CantusID
     A "CantusID" record is a chant in general, that exists in many different Source records. These
     will be available at the path indicated in the ``"browse_cantusid"`` member.
 
-    :>json string id: the CANTUS ID of this resourse
+    :>json string id: the Cantus ID of this resourse
     :>json string genre: ``"name"`` field of the corresponding "Genre" resource
+    :>json string incipit: the chant's incipit with standardized spelling
     :>json string full_text: full text with standardized spelling
 
 .. _`chant record type`:
@@ -207,9 +216,10 @@ Chant
     :>json string volpiano: neume information to be rendered with the "Volpiano" font
     :>json string notes:
     :>json string cao_concordances:
-    :>json string siglum:
+    :>json string siglum: the "siglum" field of the corresponding "Source" resource
     :>json string proofreader: ``"display_name"`` of an "Indexer" resource
     :>json string melody_id: (will appear in ``"resources"`` after the first version)
+    :>json string source: the "name" field of the corresponding "Source" resource
     :>json string resources>source: URL to the containing "Source" resource
     :>json string resources>office: URL to the corresponding "Office"
     :>json string resources>genre: *not provided* (ask the "CantusID" resource)
@@ -321,7 +331,7 @@ Source
     :>json string editors: List of ``"display_name"`` of indexers who edited this manuscript
     :>json string indexers: List of ``"display_name"`` of indexers who entered this manuscript
     :>json string proofreaders: List of ``"display_name"`` of indexers who proofread this manuscript
-    :>json string segment: Segment
+    :>json string segment: Segment (i.e., source database)
     :>json string source_status: Status of this source
     :>json string source_status_desc: Elaboration of ``"source_status"``
     :>json string summary: Summary
@@ -406,7 +416,7 @@ Indexer
 
 .. http:get:: /(browse_indexers)/(string:id)/
 
-    An "Indexer" corresponds to an agent who has entered or modified data in the CANTUS Database
+    An "Indexer" corresponds to an agent who has entered or modified data in the Cantus Database
     (usually a human). These will be avialable at the path indicated in the ``"browser_indexers"``
     member.
 

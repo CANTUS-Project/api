@@ -12,11 +12,8 @@ We can probably include more information here too.
 The HTTP/1.1bis headers are specified in `RFC 7230, S. 3.2 <https://tools.ietf.org/html/rfc7230#section-3.2>`_.
 The IANA also maintains a
 `list of standard headers <https://www.iana.org/assignments/message-headers/message-headers.xhtml>`_.
-Note that the WebDAV-specific headers are given in that list under the "http" protocol.
 
 List of Headers We Should Have:
-    - one to say whether to include "resources" links in the JSON response
-    - one to say which fields to include, or which to exclude, from the JSON response
     - also whatever I showed in the examples in "index.rst"
 
 Permanent Headers
@@ -28,28 +25,48 @@ list.
 Accept
 ^^^^^^
 
-.. important:: CANTUS clients that wish to receive data in JSON format must always request it. The
-    default response body format is XML, for standards compliance. Refer to :ref:`json and xml` for
-    more information.
+`RFC 7231 S. 5.3.2 <http://tools.ietf.org/html/rfc7231#section-5.3.2>`_. At this point, Cantus
+servers are only required to serve resources in JSON format. Refer to the `Content-Type`_ section
+for more information.
 
-`RFC 7231 S. 5.3.2 <http://tools.ietf.org/html/rfc7231#section-5.3.2>`_. CANTUS servers will be
-capable of serving all resources either in XML and JSON formats. Refer to the `Content-Type`_
-section for more information.
+In accordance with the WebDAV specification, the ``application/xml`` and ``text/xml`` foramts
+(specified in `RFC 7303 <http://tools.ietf.org/html/rfc7303>`_) will be supported as defaults in a
+future version of the Cantus API. Therefore, clients MUST provide the :http:header:`Accept`
+header for forward compatibility.
 
 Accept-Charset
 ^^^^^^^^^^^^^^
 
-`RFC 7231 S. 5.3.3 <http://tools.ietf.org/html/rfc7231#section-5.3.3>`_. CANTUS clients should
+`RFC 7231 S. 5.3.3 <http://tools.ietf.org/html/rfc7231#section-5.3.3>`_. Cantus clients should
 always use Unicode and UTF-8 whenever possible, so the recommended value for this header is ``utf-8``.
 
 Accept-Encoding
 ^^^^^^^^^^^^^^^
 
-`RFC 7231 S. 5.3.4 <http://tools.ietf.org/html/rfc7231#section-5.3.4>`_. CANTUS clients and servers
+`RFC 7231 S. 5.3.4 <http://tools.ietf.org/html/rfc7231#section-5.3.4>`_. Cantus clients and servers
 should always use data compression whenever possible, so the recommended value for this header is
 ``gzip``.
 
 TODO: find out if that's possible without too much complication
+
+Allow
+^^^^^
+
+`RFC 7231 S. 7.4.1 <http://tools.ietf.org/html/rfc7231#section-7.4.1>`_. When a client invokes the
+``OPTIONS`` method on a resource, the "Allow" header in the response will indicate which other
+methods may be invoked on that resource.
+
+Example:
+
+.. sourcecode:: http
+
+    OPTIONS /(browse_chants) HTTP/1.1
+
+.. sourcecode:: http
+
+    HTTP/1.1 200 OK
+
+    Allow: GET, HEAD, OPTIONS
 
 Content-Encoding
 ^^^^^^^^^^^^^^^^
@@ -70,63 +87,189 @@ by an HTTP library) to determine when all data has been received.
 Content-Type
 ^^^^^^^^^^^^
 
-`RFC 7231 S. 3.1.1.5 <http://tools.ietf.org/html/rfc7231#section-3.1.1.5>`_. CANTUS servers provide
+`RFC 7231 S. 3.1.1.5 <http://tools.ietf.org/html/rfc7231#section-3.1.1.5>`_. Cantus servers provide
 the Content-Type header with every response, including the "charset" parameter. While "charset" will
 almost invariably be ``utf-8``, it may be possible to provide other character sets in the future.
 
-The media-type will be one of:
-    - ``application/json`` for a message body encoded in JSON, as specified in
-        `RFC 7158 <http://tools.ietf.org/html/rfc7158>`_.
-    - ``application/xml`` for a message body encoded in XML, as specified in
-        `RFC 7303 <http://tools.ietf.org/html/rfc7303>`_.
-    - ``text/xml`` as ``application/xml``
+The media-type will be ``application/json``, indicating a message body encoded in JSON, as specified
+in `RFC 7158 <http://tools.ietf.org/html/rfc7158>`_.
 
-In accordance with the WebDAV specification, the XML formats shall be the default format provided
-to and by the server (i.e., when the "Accept" header is not specified). Refer to
-:ref:`json and xml` for more information.
+In accordance with the WebDAV specification, the ``application/xml`` and ``text/xml`` foramts
+(specified in `RFC 7303 <http://tools.ietf.org/html/rfc7303>`_) will be supported as defaults in a
+future version of the Cantus API. Therefore, clients MUST provide the :http:header:`Accept`
+header for forward compatibility.
 
-.. Implementation note: Tornado handles this automatically.
+.. Implementation note: Tornado handles the "Content-Type" header automatically.
 
-DAV
-^^^
+.. _`cantus headers`:
 
-`RFC 4918 S. 10.1 <http://tools.ietf.org/html/rfc4918#section-10.1>`_. The DAV header is only
-returned to resources that support DAV extensions (i.e., chants and sources, plus the respective
-parent paths, e.g., ``/chants/`` and ``/sources/``). By CANTUS API 2.0.0, once resources are
-editable, the compliance class shall be "1," but until then it will be a URL to this API document.
-
-Server
-^^^^^^
-
-`RFC 7231 S. 7.4.2 <http://tools.ietf.org/html/rfc7231#section-7.4.2>`_. Indicates the CANTUS API
-version implemented by a server. For example, ``Server: CANTUS/0.0.1`` is version 0.0.1, and
-``Server: CANTUS/3.2.6-test`` is a version called "3.2.6-test." Also refer to :ref:`version numbers`.
-
-User-Agent
-^^^^^^^^^^
-
-`RFC 7231 S. 5.5.3 <http://tools.ietf.org/html/rfc7231#section-5.5.3>`_. Indicates the CANTUS API
-version implemented by a client. For example, ``Server: CANTUS/0.0.1`` is version 0.0.1, and
-``Server: CANTUS/3.2.6-test`` is a version called "3.2.6-test." Also refer to :ref:`version numbers`.
-
-Vary
-^^^^
-
-`RFC 7231 S. 7.1.4 <http://tools.ietf.org/html/rfc7231#section-7.1.4>`_. The server sends this
-header to indicate that a header field was used in determining the response format, and that a
-subsequent request with a different value for that header may result in a different response format.
-
-Because all response bodies may be either XML or JSON, the "Vary" header will be included with any
-response that has a response body, with ``accept`` in the value::
-
-    Vary: accept
-
-Other headers may be included too, however only when a header changes the *representation* of data
-returned, not the data itself. For example, a header specifying how many search results to return
-does not change their representation, and will therefore not be included in the "Vary" header.
-
-CANTUS-Specific Extension Headers
+Cantus-Specific Extension Headers
 ---------------------------------
 
-These headers extend the HTTP and WebDAV standards in ways specific to the CANTUS API. We create
+These headers extend the HTTP and WebDAV standards in ways specific to the Cantus API. We create
 extension headers only when no sensible alternative is sensible.
+
+X-Cantus-Version
+^^^^^^^^^^^^^^^^
+
+Indicates the Cantus API version implemented by a client or server. For example,
+``X-Cantus-Version: Cantus/0.0.1`` is version 0.0.1, and ``X-Cantus-Version: Cantus/3.2.6-test`` is
+a version called "3.2.6-test." Also refer to :ref:`version numbers`.
+
+X-Cantus-Include-Resources
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Clients MAY include this header in a requested, telling a server whether to include a "resources"
+member with hyperlinks to related resources. This can be "true" or "false" (but is case-insensitive).
+Servers MUST use this header to indicate whether "resources" members are included in a response.
+
+X-Cantus-Fields
+^^^^^^^^^^^^^^^
+
+Clients MAY use this header to request only certain fields. Servers MUST include this header, which
+lists the fields that are present in *all* returned resources. Fields that are only present in some
+of the returned resources belong in the :http:header:`X-Cantus-Extra-Fields` header. Refer also to
+the :ref:`cantus header example`.
+
+X-Cantus-Extra-Fields
+^^^^^^^^^^^^^^^^^^^^^
+
+A semicolon-separated list of resource fields. This has no meaning in a request, but a server MUST
+use this to indicate which fields were available for some, but not all, resources. Refer also to the
+:ref:`cantus header example`.
+
+X-Cantus-Total-Results
+^^^^^^^^^^^^^^^^^^^^^^
+
+The total number of results that match a search query. The server MUST include this header with the
+results of every search query.
+
+X-Cantus-Per-Page
+^^^^^^^^^^^^^^^^^
+
+Clients MAY use this header to negotiate "paginated" results with the server, where queries matching
+a large number of resources will return information about only a portion of those resources. The
+value should always be a positive integer or zero. A zero symbolizes a request for non-paginated
+results---information for all matching resources. Servers MUST include this header if the
+:http:header:`X-Cantus-Total-Results` is present and greater than ``0`` (i.e., for every search
+query that yields results).
+
+If the server determines that the number of requested resources is too high, it MUST return a status
+code of `507 Insufficient Storage <https://tools.ietf.org/html/rfc4918#section-11.5>`_.
+The limit is determined by the server, and may change arbitrarily. However, the 507 response MUST
+include an :http:header:`X-Cantus-Per-Page` header with a suggested value that the server determines
+it is likely to be capable of handling.
+
+X-Cantus-Page
+^^^^^^^^^^^^^
+
+If :http:header:`X-Cantus-Per-Page` is non-zero, servers MUST and clients MAY include this header to
+indicate that the results should correspond to a particular sub-set of the full query. If a client
+provides a value for this header greater than :http:header:`X-Cantus-Total-Results` divided by
+:http:header:`X-Cantus-Per-Page` (i.e., greater than the total number of pages) the server MUST
+respond with `409 Conflict <https://tools.ietf.org/html/rfc7231#section-6.5.8>`_.
+
+X-Cantus-Sort
+^^^^^^^^^^^^^
+
+If the :http:header:`X-Cantus-Sort` is present in a request, it will contain a field name and
+direction indicator (``asc`` or ``desc``) separated by a semicolon. The field name may also be
+"relevance," the default value, which ranks search results by a server-determined relevance score.
+If the indicated field is not present in all sources, the server MAY choose another field by which
+to sort. For every search query, the server MUST include an :http:header:`X-Cantus-Sort` response
+header indicating the actual field and sort direction of the response.
+
+.. _`X-Cantus-Search-Help`:
+
+X-Cantus-Search-Help
+^^^^^^^^^^^^^^^^^^^^
+
+If the client indicates ``true`` in the :http:header:`X-Cantus-Search-Help` header, the server MAY
+modify a search request to be more lenient if the original search request produced no results. In
+this case, the server MUST return the actual query in the :http:header:`X-Cantus-Search-Help`
+response header.
+
+.. _`cantus header example`:
+
+Example of Cantus Headers
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A response.
+
+.. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json; charset="utf-8"
+    Content-Length: xxx
+    X-Cantus-Version: 1.0.0
+    X-Cantus-Include-Resources: false
+    X-Cantus-Fields: id;incipit
+    X-Cantus-Extra-Fields: cantus_id
+    X-Cantus-Total-Results: 10
+    X-Cantus-Per-Page: 3
+    X-Cantus-Page: 2
+
+    {"results": [
+        {"chant": {
+             "id": "149243",
+             "inicipit": "Estote parati similes",
+             "cantus_id": "002685"
+             }},
+        {"chant": {
+            "id": "149244",
+            "incipit": "Salvator mundi domine qui nos",
+            }},
+        {"chant": {
+            "id": "149245",
+            "incipit": "Estote parati similes",
+            "cantus_id": "002685",
+            }}
+        ]
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
