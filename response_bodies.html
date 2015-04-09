@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Request and Response Bodies &mdash; Cantus API 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Cantus API 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="How to Search" href="searching.html" />
+    <link rel="prev" title="HTTP Headers" href="http_headers.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+        <div class="headertitle"><a
+          href="index.html">Cantus API 0.1.0 documentation</a></div>
+        <div class="rel">
+          <a href="http_headers.html" title="HTTP Headers"
+             accesskey="P">previous</a> |
+          <a href="searching.html" title="How to Search"
+             accesskey="N">next</a> |
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="request-and-response-bodies">
+<h1>Request and Response Bodies<a class="headerlink" href="#request-and-response-bodies" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="request-bodies">
+<h2>Request Bodies<a class="headerlink" href="#request-bodies" title="Permalink to this headline">¶</a></h2>
+<p>In the first version of the Cantus API, the only type of request that has a request body is a
+search. Refer to <a class="reference internal" href="searching.html#searching"><em>How to Search</em></a> for more information. Request bodies will be more widely
+used in subsequent versions of the Cantus API, especially for updating and uploading new records.</p>
+</div>
+<div class="section" id="response-bodies">
+<span id="id1"></span><h2>Response Bodies<a class="headerlink" href="#response-bodies" title="Permalink to this headline">¶</a></h2>
+<p>Response bodies are JSON formatted, which reduces complexity for client applications written in
+JavaScript. For single resources, they will follow this form:</p>
+<div class="highlight-http"><div class="highlight"><pre>{&quot;resource type&quot;:
+     {&quot;field&quot;: &quot;value&quot;,
+      &quot;field&quot;: &quot;value&quot;
+     }
+}
+</pre></div>
+</div>
+<p>The slight modification required for response bodies to search queries are described in
+<a class="reference internal" href="#search-response-bodies"><em>Response Bodies to Searches</em></a>.</p>
+<p>Only fields with data will be included in a response, regardless of which fields are requested. In
+addition, hyperlinks to corresponding resources are automatically included whenever possible, in the
+&#8220;resources&#8221; member of the response body. Consider the following example:</p>
+<div class="highlight-http"><div class="highlight"><pre>{&quot;chant&quot;:
+    {&quot;incipit&quot;: &quot;Dixit dominus paralytico&quot;,
+     &quot;cantus_id&quot;: &quot;002288&quot;,
+     &quot;feast&quot;: &quot;Dom. 21 p. Pent.&quot;,
+     &quot;feast_desc&quot;: &quot;21st Sunday after Pentecost&quot;},
+     &quot;resources&quot;: {&quot;cantus_id&quot;: &quot;/chants/cantus_id/002288/&quot;,
+                   &quot;feast&quot;: &quot;/feasts/1616/&quot;
+                  }
+}
+</pre></div>
+</div>
+<p>The response body tells us that this chant occurs during the feast called &#8220;Dom. 21 p. Pent.&#8221; which
+is the &#8220;21st Sunday after Pentecost,&#8221; and that more information about this feast is available at the
+<tt class="docutils literal"><span class="pre">/feasts/1616/</span></tt> URL. However, some fields do not have corresponding &#8220;resources&#8221; members, and some
+&#8220;resources&#8221; fields do not have corresponding data fields.</p>
+<p>Use the <a class="reference internal" href="http_methods.html#options-http-method"><em>OPTIONS</em></a> method to determine the fields available for a
+particular resource.</p>
+</div>
+<div class="section" id="response-bodies-to-searches">
+<span id="search-response-bodies"></span><h2>Response Bodies to Searches<a class="headerlink" href="#response-bodies-to-searches" title="Permalink to this headline">¶</a></h2>
+<p>The only difference between the response body for a specific resource, and the response body for a
+search query is the the latter is &#8220;wrapped in&#8221; a &#8220;results&#8221; element. For example:</p>
+<div class="highlight-http"><div class="highlight"><pre>{&quot;results&quot;: [
+    {&quot;chant&quot;: {
+         &quot;id&quot;: &quot;149243&quot;,
+         &quot;inicipit&quot;: &quot;Estote parati similes&quot;,
+         &quot;cantus_id&quot;: &quot;002685&quot;
+         }},
+    {&quot;chant&quot;: {
+        &quot;id&quot;: &quot;149244&quot;,
+        &quot;incipit&quot;: &quot;Salvator mundi domine qui nos&quot;,
+        &quot;cantus_id&quot;: &quot;830303&quot;
+        }},
+    {&quot;chant&quot;: {
+        &quot;id&quot;: &quot;149245&quot;,
+        &quot;incipit&quot;: &quot;Estote parati similes&quot;,
+        &quot;cantus_id&quot;: &quot;002685&quot;,
+        }}
+    ]
+}
+</pre></div>
+</div>
+<p>While this nesting may seem unnecessary, it helps to clarify the type of resources found by a search.
+In many cases this clarification is unnecessary, like with a search request to the
+<tt class="docutils literal"><span class="pre">/(browse_feasts)</span></tt> URL. However, some search requests may return mixed results&#8212;especially
+searches on the root URL.</p>
+<p>For more information about searching, refer to <a class="reference internal" href="searching.html#searching"><em>How to Search</em></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="resource_types.html">Resource Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http_methods.html">HTTP Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http_headers.html">HTTP Headers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Request and Response Bodies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#request-bodies">Request Bodies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#response-bodies">Response Bodies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#response-bodies-to-searches">Response Bodies to Searches</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="searching.html">How to Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiserver.html">Multi-Server Interoperabilty</a></li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="http_headers.html" title="HTTP Headers"
+             >previous</a> |
+          <a href="searching.html" title="How to Search"
+             >next</a> |
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/response_bodies.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2015, Christopher Antila.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

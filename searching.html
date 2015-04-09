@@ -1,0 +1,400 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to Search &mdash; Cantus API 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Cantus API 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="Multi-Server Interoperabilty" href="multiserver.html" />
+    <link rel="prev" title="Request and Response Bodies" href="response_bodies.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+        <div class="headertitle"><a
+          href="index.html">Cantus API 0.1.0 documentation</a></div>
+        <div class="rel">
+          <a href="response_bodies.html" title="Request and Response Bodies"
+             accesskey="P">previous</a> |
+          <a href="multiserver.html" title="Multi-Server Interoperabilty"
+             accesskey="N">next</a> |
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="how-to-search">
+<span id="searching"></span><h1>How to Search<a class="headerlink" href="#how-to-search" title="Permalink to this headline">¶</a></h1>
+<p>Every resource type that may be searched will provide a &#8220;search&#8221; URL in its &#8220;resources&#8221; response.
+As the &#8220;browsing&#8221; URL is the resource type prefixed with <tt class="docutils literal"><span class="pre">&quot;browse_&quot;</span></tt>, the &#8220;searching&#8221; URL is the
+resource type prefixed with <tt class="docutils literal"><span class="pre">&quot;search_&quot;</span></tt>. For example, you may submit a request to the root URL:</p>
+<div class="highlight-http"><div class="highlight"><pre><span class="nf">GET</span> <span class="nn">/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p>And receive a response like this:</p>
+<div class="highlight-http"><div class="highlight"><pre>HTTP/1.1 200 OK
+
+...
+{
+    &quot;resources&quot;: {
+        &quot;browse_genres&quot;: &quot;/genres/{id}/&quot;,
+        &quot;search_genres&quot;: &quot;/genres/search/{id}/&quot;,
+        ...
+    }
+}
+</pre></div>
+</div>
+<p>Thus in this case clients should use the <tt class="docutils literal"><span class="pre">/genres/search/</span></tt> URL to search for a genre, and the
+<tt class="docutils literal"><span class="pre">/genres/search/{id}/</span></tt> URL to search among Chants associated with a specific genre. Search
+requests are submitted as a <tt class="docutils literal"><span class="pre">GET</span></tt> request to the indicated URL, with a specially-formatted request
+body and optional headers. (Refer to <a class="reference internal" href="http_headers.html#cantus-headers"><em>Cantus-Specific Extension Headers</em></a> for more information about headers
+relevant to searching).</p>
+<p>Knowing which search URL to use can seem confusing; here are some simple guidelines:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">If you want one resource type, search with its URL. For example, use <tt class="docutils literal"><span class="pre">/(search_genres)/</span></tt>
+to find a genre).</p>
+</li>
+<li><p class="first">To limit results to those associated with a particular resource, use that resource&#8217;s search
+URL. For example, use <tt class="docutils literal"><span class="pre">/(search_genres)/(antiphon_genre_id)/</span></tt> to search among the Chants
+that are antiphons.</p>
+</li>
+<li><p class="first">To limit results with multiple resources, choose one of the above methods. For example, to
+find Easter antiphons, you could:</p>
+<ul class="simple">
+<li>use the <tt class="docutils literal"><span class="pre">/(search_chants)/</span></tt> URL and provide the limiting genre and feast in the request body,</li>
+<li>use <tt class="docutils literal"><span class="pre">/(search_genres)/</span></tt> with an &#8220;id&#8221; and provide the feast &#8220;id&#8221; in the request body, or</li>
+<li>use <tt class="docutils literal"><span class="pre">/(search_feasts)/</span></tt> with an &#8220;id&#8221; and provide the genre &#8220;id&#8221; in the request body.</li>
+</ul>
+<p>The results are the same in all three situations, so your choice is merely a preference.</p>
+</li>
+<li><p class="first">If you do not know the limiting &#8220;id&#8221; then try to use a name-based sub-query as described
+<a class="reference internal" href="#name-based-filter"><em>below</em></a>.</p>
+</li>
+</ol>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>An Idea for the Future</p>
+<p class="last">Arbitrarily nestable search URLs. For example, <tt class="docutils literal"><span class="pre">/(search_sources)/123/(search_offices)/63/</span></tt>
+would return all the Chants in a book that are in a particular office. You can already get the
+same functionality by using the search request body, but maybe this is more convenient.</p>
+</div>
+<div class="section" id="search-request">
+<h2>Search Request<a class="headerlink" href="#search-request" title="Permalink to this headline">¶</a></h2>
+<p>With the possible exception of a resource ID present in the URL, search parameters are carried in
+the request body. Some additional parameters, used to change the format of results, are carried in
+headers, as specified below in <a class="reference internal" href="#search-request-headers"><em>Use Headers to Change the Result Format</em></a>.</p>
+<p>The format of a search request body depends on the search grammar. At present, the only supported
+grammar is <a class="reference internal" href="#cantus-query-grammar"><em>described below</em></a>.</p>
+<p>TODO: write other things here</p>
+</div>
+<div class="section" id="cantus-query-grammar">
+<span id="id1"></span><h2>&#8220;cantus&#8221; Query Grammar<a class="headerlink" href="#cantus-query-grammar" title="Permalink to this headline">¶</a></h2>
+<p>The &#8220;cantus&#8221; query grammar is inspired by Solr&#8217;s &#8220;standard query parser,&#8221; but differs notably.
+Unlike with Solr, query parameters are part of the request body rather than the URL&#8212;as
+required by the HTTP <tt class="docutils literal"><span class="pre">SEARCH</span></tt> method. Also, query parameters are modified and added by the
+server implementation before being sent to Solr, in order to fetch the expected results. Therefore,
+even if a server implementation does use Solr, which is not required by this API, clients should not
+expect their query will be submitted to the Solr server verbatim. This query grammar will be
+retained when the Cantus API becomes WebDAV compatible.</p>
+<p>All parameters belong in the &#8220;query&#8221; member of the request body, described in <a class="reference internal" href="#query-string-syntax"><em>Syntax in the &#8220;query&#8221; String</em></a>.</p>
+<p>The fields available depends on the resource type being queried (refer to the relevant
+<a class="reference internal" href="resource_types.html#resource-types"><em>Resource Types</em></a> subsection for more information). Some fields&#8212;those that refer to a resource
+type&#8212;also have a variant suffixed with &#8220;_id&#8221;to allow more accurate <a class="reference internal" href="#id-based-filter"><em>ID-based Filtering</em></a>. For
+those resources, ID-based filtering is preferred; otherwise a <a class="reference internal" href="#name-based-filter"><em>Name-based Sub-query</em></a> will
+happen.</p>
+<p>For example, a query at the <tt class="docutils literal"><span class="pre">/(search_sources)/</span></tt> URL may use the following content-based fields:
+id, title, siglum, provenance_detail, date, source_status_desc, summary, liturgical_occasions,
+description, indexing_notes, and indexing_date. In addition, the following fields correspond to
+another resource, so they may be used in ID-based filtering with an &#8220;_id&#8221; suffix, or in a name-based
+sub-query: rism, provenance, century, notation_style, editors, indexers, proofreaders, segment,
+and source_status.</p>
+<p>In all cases, any unknown, invalid, or inapplicable data are ignored. If all data are ignored, an
+empty result body will be provided. For example, a search to the <tt class="docutils literal"><span class="pre">/(search_sources)/</span></tt> URL for
+<tt class="docutils literal"><span class="pre">{'query':</span> <span class="pre">'+city:Waterloo'}</span></tt> will always return no results because Source resources do not have
+a &#8220;city&#8221; field.</p>
+<div class="section" id="syntax-in-the-query-string">
+<span id="query-string-syntax"></span><h3>Syntax in the &#8220;query&#8221; String<a class="headerlink" href="#syntax-in-the-query-string" title="Permalink to this headline">¶</a></h3>
+<p>The syntax of this string is kept as close as possible to that of the Solr standard query parser.
+The &#8220;query&#8221; string MUST NOT use URL encoding, but it SHOULD be escaped in the same way as any other
+JavaScript string.</p>
+<p>You may include search terms the following ways:</p>
+<ul class="simple">
+<li>Term searches by using that word (e.g., <tt class="docutils literal"><span class="pre">'antiphon'</span></tt>). Beware this does not match similar terms,
+or partial terms&#8212;&#8221;antiphoner&#8221; will not be included in the results of this search.</li>
+<li>Phrase searches with <tt class="docutils literal"><span class="pre">&quot;</span></tt> (e.g., <tt class="docutils literal"><span class="pre">'&quot;of</span> <span class="pre">bingen&quot;'</span></tt> will not match &#8220;bingen&#8221; unless preceded by &#8220;of&#8221;).</li>
+<li>Wildcard with <tt class="docutils literal"><span class="pre">?</span></tt> and <tt class="docutils literal"><span class="pre">*</span></tt>, matching a single character and zero or more characters,
+respectively. You may want to use the <tt class="docutils literal"><span class="pre">*</span></tt> wildcard more often than not, since not using it may
+lead to fewer results than expected.</li>
+<li>Fuzzy searches by appending <tt class="docutils literal"><span class="pre">~</span></tt>, which returns results arbitrarily similar to a term. For
+example, <tt class="docutils literal"><span class="pre">antiphon~</span></tt> would also match &#8220;antiphoner.&#8221;</li>
+<li>Proximity searching with <tt class="docutils literal"><span class="pre">~</span></tt> and an integer, as in <tt class="docutils literal"><span class="pre">&quot;manuscript</span> <span class="pre">available&quot;~5</span></tt>, which matches
+&#8220;manuscript is available&#8221; and &#8220;manuscript is freely available.&#8221;</li>
+<li>Range searches, as in <tt class="docutils literal"><span class="pre">date:[1300</span> <span class="pre">TO</span> <span class="pre">1400}</span></tt> matches the &#8220;date&#8221; field between 1300 and 1400,
+including 1300 itself but not 1400 itself. May also use alphabetically ordered ranges.</li>
+<li>Boosting term or phrases with <tt class="docutils literal"><span class="pre">^</span></tt> and a positive number. The default boost value is 1. The
+higher a term&#8217;s score including boost, the higher it will appear in the default sort (that is,
+unless the sort field is changed).</li>
+<li>Field specification with <tt class="docutils literal"><span class="pre">:</span></tt>, as in <tt class="docutils literal"><span class="pre">'incipit:*deus*'</span></tt>, which will return every Chant where
+&#8220;deus&#8221; is part of the &#8220;incipit&#8221; field.</li>
+<li>Boolean operators <tt class="docutils literal"><span class="pre">&amp;&amp;</span></tt>, <tt class="docutils literal"><span class="pre">!</span></tt>, and <tt class="docutils literal"><span class="pre">||</span></tt>, or their word equivalents <tt class="docutils literal"><span class="pre">AND</span></tt>, <tt class="docutils literal"><span class="pre">NOT</span></tt>, and
+<tt class="docutils literal"><span class="pre">OR</span></tt>, which must be capitalized.</li>
+<li>Requirement operators <tt class="docutils literal"><span class="pre">+</span></tt> and <tt class="docutils literal"><span class="pre">-</span></tt>. which require that a term is or is not present in the
+results, respectively. The default (not using these symbols) means that a term is optional, though
+documents matching more terms will have a higher relevance score.</li>
+<li>Grouping with <tt class="docutils literal"><span class="pre">()</span></tt>, as in <tt class="docutils literal"><span class="pre">'(cat</span> <span class="pre">AND</span> <span class="pre">breading)</span> <span class="pre">OR</span> <span class="pre">silliness'</span></tt>.</li>
+</ul>
+<p>Refer to <a class="reference external" href="https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser">this page</a>
+for more complete descriptions. Clients may provide users the opportunity to use the
+<a class="reference internal" href="http_headers.html#x-cantus-search-help"><em>X-Cantus-Search-Help</em></a> header, which allows the server to run a less strict query in
+the hope it will return more results.</p>
+</div>
+<div class="section" id="fetching-a-resource-with-its-id">
+<h3>Fetching a Resource with Its &#8220;id&#8221;<a class="headerlink" href="#fetching-a-resource-with-its-id" title="Permalink to this headline">¶</a></h3>
+<p>It is possible to fetch a single resource with a known &#8220;id&#8221; value using a <tt class="docutils literal"><span class="pre">SEARCH</span></tt> query,
+though we recommend you use the resource&#8217;s URL. For example, <tt class="docutils literal"><span class="pre">/(browse_indexer)/14</span></tt> will fetch
+the Indexer with an &#8220;id&#8221; of <tt class="docutils literal"><span class="pre">14</span></tt>. This requires less server-side processing, and reduces the
+chance of other query parameters interfering. However, the &#8220;id&#8221; field is still useful in a
+<tt class="docutils literal"><span class="pre">SEARCH</span></tt> query to obtain a range. For example, <tt class="docutils literal"><span class="pre">id:[14</span> <span class="pre">TO</span> <span class="pre">16]</span></tt> will return the resources
+with &#8220;id&#8221; of <tt class="docutils literal"><span class="pre">14</span></tt>, <tt class="docutils literal"><span class="pre">15</span></tt>, and <tt class="docutils literal"><span class="pre">16</span></tt>.</p>
+</div>
+<div class="section" id="id-based-filter">
+<span id="id-based-filtering"></span><h3>ID-based Filtering<a class="headerlink" href="#id-based-filter" title="Permalink to this headline">¶</a></h3>
+<p>When you want to limit search results by a particular resource and you know its &#8220;id,&#8221; use a ID-based
+filter. This search strategy is more accurate than name-based sub-queries, so we prefer it whenever
+possible.</p>
+<p>TODO: finish this</p>
+</div>
+<div class="section" id="name-based-sub-query">
+<span id="name-based-filter"></span><h3>Name-based Sub-query<a class="headerlink" href="#name-based-sub-query" title="Permalink to this headline">¶</a></h3>
+<p>When you want to limit search results by a particular resource but you do not know the &#8220;id,&#8221; you
+can use a name-based sub-query to avoid submitting two queries. For example, to search for Easter
+antiphons that mention &#8220;jesus&#8221; in the incipit, you might submit this query:</p>
+<div class="highlight-http"><div class="highlight"><pre><span class="nf">GET</span> <span class="nn">/(search_chants)/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+
+<span class="p">{</span>
+    <span class="nt">&quot;incipit&quot;</span><span class="p">:</span> <span class="s2">&quot;jesus&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;feast&quot;</span><span class="p">:</span> <span class="s2">&quot;pascha&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;genre&quot;</span><span class="p">:</span> <span class="s2">&quot;antiphon&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>On the server side, the &#8220;_name&#8221; fields are first replaced with the corresponding &#8220;_id&#8221; fields by
+running a search on the appropriate resource type where the &#8220;_name&#8221; field is &#8220;name,&#8221; and using <em>all</em>
+the returned &#8220;id&#8221; values in a final search. For example, the preceding example is equivalent to
+submitting the following three queries:</p>
+<div class="highlight-http"><div class="highlight"><pre>GET /(search_feasts)/ HTTP/1.1
+
+{&quot;name&quot;: &quot;pascha&quot;}
+&lt;!-- returns one feast with an id of &quot;08020100&quot; --&gt;
+</pre></div>
+</div>
+<div class="highlight-http"><div class="highlight"><pre>GET /(search_genres)/ HTTP/1.1
+
+{&quot;name&quot;: &quot;antiphon&quot;}
+&lt;!-- returns one genre with an id of &quot;422&quot; --&gt;
+</pre></div>
+</div>
+<div class="highlight-http"><div class="highlight"><pre><span class="nf">GET</span> <span class="nn">/(search_chants)/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+
+<span class="p">{</span>
+    <span class="nt">&quot;incipit&quot;</span><span class="p">:</span> <span class="s2">&quot;jesus&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;feast_id&quot;</span><span class="p">:</span> <span class="s2">&quot;08020100&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;genre_id&quot;</span><span class="p">:</span> <span class="s2">&quot;422&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The benefit of a name-based sub-query is that using fewer requests means transmitting less data
+and getting results sooner. The disadvantage is that the results may be much less useful if the
+&#8220;field_name&#8221; result provides many more results, or unexpected results. The preceding search, for
+example, returns results associated with the &#8220;Pascha Annotinum&#8221; feast, which is not Easter. Because
+it is virtually impossible for a client or server to predict whether users are running into this
+problem, ID-based filtering is preferred whenever a resource &#8220;id&#8221; is available.</p>
+</div>
+<div class="section" id="use-headers-to-change-the-result-format">
+<span id="search-request-headers"></span><h3>Use Headers to Change the Result Format<a class="headerlink" href="#use-headers-to-change-the-result-format" title="Permalink to this headline">¶</a></h3>
+<p>asdf</p>
+</div>
+</div>
+<div class="section" id="search-result">
+<h2>Search Result<a class="headerlink" href="#search-result" title="Permalink to this headline">¶</a></h2>
+<p>asdf</p>
+</div>
+<div class="section" id="resource-specific-information">
+<h2>Resource-Specific Information<a class="headerlink" href="#resource-specific-information" title="Permalink to this headline">¶</a></h2>
+<p>Query without an &#8220;id&#8221; string to search amongst the resources of that type (e.g., to find a
+particular feast use <tt class="docutils literal"><span class="pre">/(search_feasts)/</span></tt>), or with an &#8220;id&#8221; string to find other resources
+associated with a particular resource (e.g., to find all the chants that happen at Compline).</p>
+<dl class="get">
+<dt id="get--(search_indexers)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_indexers</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_indexers)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Chant and Source resources created, edited, or indexed by
+an Indexer.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_chants)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_chants</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_chants)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the other resources associated with a Chant (i.e., the Source,
+the Office, the Siglum, and so on).</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_sources)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_sources</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_sources)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Chant resources in this Source.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_centuries)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_centuries</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_centuries)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Chant and Source resources in a century.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_feasts)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_feasts</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_feasts)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Chants associated with a feast.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_genres)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_genres</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_genres)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Chants in a genre.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_notations)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_notations</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_notations)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Sources written with a particular notation style.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_offices)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_offices</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_offices)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Chants that happen in an office.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_provenances)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_provenances</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_provenances)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Chants and Sources from a monastery.</p>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--(search_sigla)-(string-id)-">
+<tt class="descname">GET </tt><tt class="descname">/</tt><big>(</big><em>search_sigla</em><big>)</big><tt class="descname">/</tt><big>(</big><em class="property">string: </em><em>id</em><big>)</big><tt class="descname">/</tt><a class="headerlink" href="#get--(search_sigla)-(string-id)-" title="Permalink to this definition">¶</a></dt>
+<dd><p>With an &#8220;id&#8221; string, finds all the Chants and Sources with a siglum.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="unsearchable-resource-types">
+<h2>Unsearchable Resource Types<a class="headerlink" href="#unsearchable-resource-types" title="Permalink to this headline">¶</a></h2>
+<p>I decided it did not make sense to search for these&#8212;users will always want to search something
+else too.</p>
+<ul class="simple">
+<li>Portfolio</li>
+<li>Segment</li>
+<li>Source Status</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="resource_types.html">Resource Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http_methods.html">HTTP Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http_headers.html">HTTP Headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="response_bodies.html">Request and Response Bodies</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">How to Search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#search-request">Search Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cantus-query-grammar">&#8220;cantus&#8221; Query Grammar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#search-result">Search Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resource-specific-information">Resource-Specific Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unsearchable-resource-types">Unsearchable Resource Types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multiserver.html">Multi-Server Interoperabilty</a></li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="response_bodies.html" title="Request and Response Bodies"
+             >previous</a> |
+          <a href="multiserver.html" title="Multi-Server Interoperabilty"
+             >next</a> |
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/searching.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2015, Christopher Antila.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
