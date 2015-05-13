@@ -94,54 +94,48 @@ Response:
 .. sourcecode:: http
 
     HTTP/1.1 200 OK
+    ...
 
     {
         "resources": {
-            "browse_sources": "/sources/{id}/",
-            "browse_feasts": "/feasts/{id}/",
-            "browse_chants": "/chants/{id}/"
+            "browse_sources": "/sources/id?",
+            "browse_feasts": "/feasts/id?",
+            "browse_chants": "/chants/id?",
+            ...
         }
     }
 
-From which you have learned the means by which to make the URIs to sources, feasts, and chants.
+From which you have learned the means by which to make the URLs to sources, feasts, and chants.
 Whenever possible, metadata about the results is held in the HTTP headers, since this allows clients
 to use easier formatting-for-display algorithms, and also to make use of the ``HEAD`` HTTP method
-in some situations.
-
-TODO: rewrite the following example so that it shouldn't use SEARCH
-TODO: first consider whether it's a useful example at all, or you're just convincing yourself
+in many situations.
 
 In this example request, the client requests the HTTP headers corresponding to a search query for
 the "Chant" resources that contain "dixit dominus":
 
 .. sourcecode:: http
 
-    HEAD /chants/?q="dixit_dominus" HTTP/1.1
+    HEAD /(browse_chants)/357685/ HTTP/1.1
+    If-None-Match "7827ff38cb8ef147d9f5edb749a0f300dac2ebe1"
 
 Consider the following response:
 
 .. sourcecode:: http
 
-    HTTP/1.1 200 OK
-    X-SearchResults-Total: 4206
-    X-SearchResults-Paginated: true
-    X-SearchResults-Page: 1
-    X-SearchResults-ResultFrom: 1
-    X-SearchResults-ResultTo: 10
-    X-Cantus-Fields: cantus_id incipit source folio genre feast mode siglum
+    HTTP/1.1 304 Not Modified
+    ETag "7827ff38cb8ef147d9f5edb749a0f300dac2ebe1"
+    Server "Abbott/1.0"
+    X-Cantus-Fields: feast differentia position genre source sequence office fest_desc cantus_id id mode full_text incipit folio
+    ...
 
-With this header information the client can make an informed decision about how to proceed.
-Considering the number of results, the client may decide to automatically help the user get a
-high-level view of the results. The following ``GET`` request with the same query asks for 100
-results per page, and to receive only the "cantus_id," "incipit," and "source" fields for each
-result, to avoid being overloaded with unnecessary data:
+With this (abbreviated) header information the client can make an informed decision about how to
+proceed. The :http:header:`If-None-Match` and :http:header:`ETag` headers tell us that this chant's
+content has not changed since the last time the client checked, so transmitting the response body
+would have been redundant anyway. With the :http:header:`X-Cantus-Fields` header we also know the
+fields the database has for this chant---and more importantly that some of the fields are mising
+(like ``marginalia`` and ``volpiano``).
 
-.. sourcecode:: http
-
-    GET /chants/?q="dixit_dominus"
-    X-SearchResults-Paginated: true
-    X-SearchResults-PerPage: 100
-    X-Cantus-Fields: cantus_id incipit source
+TODO: write an example using headers to help with a search
 
 .. _`version numbers`:
 

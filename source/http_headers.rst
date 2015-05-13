@@ -208,68 +208,23 @@ A response.
     X-Cantus-Total-Results: 10
     X-Cantus-Per-Page: 3
     X-Cantus-Page: 2
+    X-Cantus-Include-Resources: false
 
-    {"results": [
-        {"chant": {
-             "id": "149243",
-             "inicipit": "Estote parati similes",
-             "cantus_id": "002685"
-             }},
-        {"chant": {
-            "id": "149244",
-            "incipit": "Salvator mundi domine qui nos",
-            }},
-        {"chant": {
-            "id": "149245",
-            "incipit": "Estote parati similes",
-            "cantus_id": "002685",
-            }}
-        ]
+    {"149243": {
+        "id": "149243",
+        "type": "chant",
+        "inicipit": "Estote parati similes",
+        "cantus_id": "002685"
+        },
+     "149244": {
+         "id": "149244",
+         "type": "chant",
+         "incipit": "Salvator mundi domine qui nos",
+        },
+     "149245": {
+         "id": "149245",
+         "type": "chant",
+         "incipit": "Estote parati similes",
+         "cantus_id": "002685",
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

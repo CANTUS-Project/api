@@ -6,11 +6,11 @@
 Resource Types
 ==============
 
-You must discover the URI paths to all resource types with the URLs provided by the server. However,
+You must discover the URL paths to all resource types with the URLs provided by the server. However,
 resource types available in a context will always be named consistently. To help understand what
 these points mean, consider the following example.
 
-You submit a request to the root URL
+You submit a request to the root URL:
 
 .. sourcecode:: http
 
@@ -23,18 +23,17 @@ You submit a request to the root URL
     ...
     {
         "resources": {
-            "browse_genres": "/genres/{id}/",
+            "browse_genres": "/genres/id?",
             ...
         }
     }
 
-To retrieve a list of all genres, you would therefore submit a ``GET`` request to
-``/genres/``. To access information about a particular genre, say genre
-25, submit a request to ``/genres/25/``. On a different deployment, or
-with a different implementation or version of the Cantus server, the URL path may be entirely
-different. However, if ``"browse_genres"`` appears in the ``"resources"`` member of a response, it
-will always point to the list of genres, and substituting a value for ``{id}`` will always give
-information related to a specific genre.
+To retrieve a list of all genres, you would therefore submit a ``GET`` request to ``/genres/``. To
+access information about a particular genre, say genre 25, submit a request to ``/genres/25/``. On
+a different deployment, or with a different implementation or version of the Cantus server, the URL
+path may be entirely different (e.g., ``/genre-browser/id?``). However, if ``"browse_genres"``
+appears in the ``"resources"`` member of a response, it will always point to the list of genres, and
+substituting a value for ``id?`` will always give information related to a specific genre.
 
 While the URLs are unlikely to change frequently (possibly never) in the above example, in the
 following example it is much more important to pay careful attention to using the URLs provided by
@@ -66,9 +65,9 @@ You submit a query about "Benedicamus patrem et filium" chants:
         },
         "resources": {
             ...
-            "556270": "https://abbott.uwaterloo.ca/chants/556270/",
-            "436440": "https://abbott.uwaterloo.ca/chants/436330/",
-            "pem-8669": "http://pemdatabase.eu/musical-item/8669",
+            "556270": {"self": "https://abbott.uwaterloo.ca/chants/556270/"},
+            "436440": {"self": "https://abbott.uwaterloo.ca/chants/436330/"},
+            "pem-8669": {"self": "http://pemdatabase.eu/musical-item/8669"},
             ...
         }
     }
@@ -88,17 +87,18 @@ Cantus API. For more information, refer to :ref:`multiserver`.
 About the "id" Field
 --------------------
 
-In resource types for which ``{id}`` makes up part of the URL, you would form the URI for a specific
-resource by substituting that resource's unique "id" value in that part of the URL. Cantus "id"
-values may consist of any alphanumeric character valid in a URL, plus hyphen or underscore.
+In resource types for which ``id?`` makes up part of the URL, you would form the URL for a specific
+resource by substituting that resource's unique "id" value in that part of the URL. **Always remove
+the question mark from the URL.** Cantus "id" values may consist of any alphanumeric character
+valid in a URL, plus hyphens and underscores.
 
 The following points also apply:
 
-- A resource's "id" must remain the same through the resource's lifetime.
-- Changing attributes, properties, or data in a resource must not attempt to change the "id" field.
-- A resource's "id" field may be prefixed with an identifier indicating which database the holds the
+- A resource's "id" MUST remain the same through the resource's lifetime.
+- Changing attributes, properties, or data in a resource MUST NOT attempt to change the "id" field.
+- A resource's "id" field MAY be prefixed with an identifier indicating which database the holds the
   resources's authoritative copy.
-- The same "id" may or may not refer to "the same" resource when served by a different deployment of
+- The same "id" MAY or may not refer to "the same" resource when served by a different deployment of
   a Cantus server application. That is, the Cantus API does not guarantee uniqueness of "id" values
   across deployments.
 
@@ -106,9 +106,9 @@ Simple Record Types
 -------------------
 
 Unlike the types listed in the following section (:ref:`complex record types`) the resources in
-this category are expected to change infrequently during the lifetime of the database---perhaps
-never. In practice this is not meaningful for the API or its implementations. However, these
-resources are also similar in having few useful attributes.
+this category will not have fields that cross-reference another resource. Simple resources also tend
+to have fewer fields, and are not expected to change often during the lifetime of the
+database---perhaps never.
 
 Each of the resources in this category will have two members in the JSON response body: ``"name"``,
 which provides a human-readable name for that resource (e.g., "14th century" for a resource of the
@@ -148,9 +148,7 @@ Notes
 ^^^^^
 
 - Every "genre" also has a "mass_or_office" field in the Solr database.
-- Every "feast" also has a "date" though sometimes it's empty
-- for "feast" the "id" is Drupal's "feastcode" and "drupal_id" is Drupal's node ID
-- for "siglum" the "id" is that of the corresponding Source
+- Every "feast" may also have "date" and "feast_code" fields, though not for all records
 
 .. _`complex record types`:
 
@@ -188,7 +186,7 @@ Chant
 ^^^^^
 
 "Chant" records are available at the URL indicated by ``"browse_chants"``. Initially this will be
-``/chants/{id}/``.
+``/chants/id?/``.
 
 .. http:get:: /(browse_chants)/(string:id)/
 
@@ -239,8 +237,9 @@ Chant
     that aren't sensibly *part of* the Chant itself.
 
 ..
-
     This table is for the developers' reference. It doesn't appear in the rendered documentation.
+
+    TODO: why does "cantus_id" appear twice? Which are we actually using?
 
     +-----------------------------+-----------------------------------+----------------------+
     | Field Name in MySQL         | Field Name in Drupal              | Field Name in JSON   |
@@ -333,7 +332,7 @@ Source
     :>json string proofreaders: List of ``"display_name"`` of indexers who proofread this manuscript
     :>json string segment: Segment (i.e., source database)
     :>json string source_status: Status of this source
-    :>json string source_status_desc: Elaboration of ``"source_status"``
+    :>json string source_status_desc: Elaboration of ``"source_status"``---probably never used.
     :>json string summary: Summary
     :>json string liturgical_occasions: Liturgical occasions
     :>json string description: Description
@@ -351,7 +350,6 @@ Source
     :>json string resources>drupal_path: URL to this Source on the "old" Drupal site.
 
 ..
-
     This table is for the developers' reference. It doesn't appear in the rendered documentation.
 
     +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
@@ -433,7 +431,6 @@ Indexer
     :>json string resources>country:
 
 ..
-
     This table is for the developers' reference. It doesn't appear in the rendered documentation.
 
     +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+

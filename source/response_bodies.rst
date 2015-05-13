@@ -13,19 +13,31 @@ used in subsequent versions of the Cantus API, especially for updating and uploa
 Response Bodies
 ---------------
 
+.. note::
+    The response body examples below are not intended to represent actual data---always check the
+    "resources" URLs provided by the server, rather than generating them on the client side.
+
+.. note::
+    Every resource has will have at least two fields: ``id`` and ``type``.
+
 Response bodies are JSON formatted, which reduces complexity for client applications written in
-JavaScript. For single resources, they will follow this form:
+JavaScript. They always have the same form:
 
 .. sourcecode:: http
 
-    {"resource type":
-         {"field": "value",
-          "field": "value"
+    {"id_value":
+         {"id": "id_value",
+          "type": "example_resource",
+          "fieldA": "value",
+          "fieldB": "value"
+         },
+     "resources":
+         {"id_value":
+              {"fieldA": "value URL",
+               "fieldB": "value URL"
+              },
          }
     }
-
-The slight modification required for response bodies to search queries are described in
-:ref:`search response bodies`.
 
 Only fields with data will be included in a response, regardless of which fields are requested. In
 addition, hyperlinks to corresponding resources are automatically included whenever possible, in the
@@ -33,92 +45,67 @@ addition, hyperlinks to corresponding resources are automatically included whene
 
 .. sourcecode:: http
 
-    {"chant":
-        {"incipit": "Dixit dominus paralytico",
-         "cantus_id": "002288",
-         "feast": "Dom. 21 p. Pent.",
-         "feast_desc": "21st Sunday after Pentecost"},
-         "resources": {"cantus_id": "/chants/cantus_id/002288/",
-                       "feast": "/feasts/1616/"
-                      }
+    {"361434":
+         {"id": "361434",
+          "type": "chant",
+          "incipit": "Dixit dominus paralytico",
+          "cantus_id": "002288",
+          "feast": "Dom. 21 p. Pent.",
+          "feast_desc": "21st Sunday after Pentecost"
+         },
+     "resources":
+         {"361434":
+              {"self": "/chants/361434cantus/",
+               "cantus_id": "/chants/cantus_id/002288/",
+               "feast": "/feasts/1616/"
+              }
+         }
     }
 
 The response body tells us that this chant occurs during the feast called "Dom. 21 p. Pent." which
 is the "21st Sunday after Pentecost," and that more information about this feast is available at the
-``/feasts/1616/`` URL. However, some fields do not have corresponding "resources" members, and some
-"resources" fields do not have corresponding data fields.
+``/feasts/1616/`` URL. In general, some fields may not have corresponding "resources" members, and
+some "resources" fields may not have corresponding data fields.
 
-Use the :ref:`OPTIONS <options http method>` method to determine the fields available for a
-particular resource.
+Use the :ref:`HEAD <head http method>` method to fetch the :http:header:`X-Cantus-Fields` header to
+determine which fields are available for a particular resource.
 
 .. _`search response bodies`:
 
 Response Bodies to Searches
 ---------------------------
 
-The only difference between the response body for a specific resource, and the response body for a
-search query is the the latter is "wrapped in" a "results" element. For example:
+The only difference between the response body for a specific resource, for a collection of resources
+at the "browse" URL, and the result of a search, is that search results may include resources of
+more than one type. Thus the "type" member is important in this case to know how results should be
+displayed. For example:
 
 .. sourcecode:: http
 
-    {"results": [
-        {"chant": {
-             "id": "149243",
-             "inicipit": "Estote parati similes",
-             "cantus_id": "002685"
-             }},
-        {"chant": {
-            "id": "149244",
-            "incipit": "Salvator mundi domine qui nos",
-            "cantus_id": "830303"
-            }},
-        {"chant": {
-            "id": "149245",
-            "incipit": "Estote parati similes",
-            "cantus_id": "002685",
-            }}
-        ]
+    {"361434":
+         {"id": "361434",
+          "type": "chant",
+          "incipit": "Dixit dominus paralytico",
+          "cantus_id": "002288",
+          "feast": "Dom. 21 p. Pent.",
+          "feast_desc": "21st Sunday after Pentecost"
+         },
+     "123673":
+         {"id": "123673",
+          "type": "source",
+          "title": "München, Franziskanerkloster St. Anna - Bibliothek, 12o Cmm 1",
+          "provenance": "Italy",
+     "resources":
+         {"361434":
+              {"self": "/chants/361434cantus/",
+               "cantus_id": "/chants/cantus_id/002288/",
+               "feast": "/feasts/1616/"
+              },
+          "123673":
+              {"self": "/books/123673/",
+               "provenance": "/provenances/3608/"
+              }
+         }
     }
 
-While this nesting may seem unnecessary, it helps to clarify the type of resources found by a search.
-In many cases this clarification is unnecessary, like with a search request to the
-``/(browse_feasts)`` URL. However, some search requests may return mixed results---especially
-searches on the root URL.
-
 For more information about searching, refer to :ref:`searching`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

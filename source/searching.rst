@@ -20,14 +20,14 @@ And receive a response like this:
     ...
     {
         "resources": {
-            "browse_genres": "/genres/{id}/",
-            "search_genres": "/genres/search/{id}/",
+            "browse_genres": "/genres/id?/",
+            "search_genres": "/genres/search/id?/",
             ...
         }
     }
 
 Thus in this case clients should use the ``/genres/search/`` URL to search for a genre, and the
-``/genres/search/{id}/`` URL to search among Chants associated with a specific genre. Search
+``/genres/search/id?/`` URL to search among Chants associated with a specific genre. Search
 requests are submitted as a ``GET`` request to the indicated URL, with a specially-formatted request
 body and optional headers. (Refer to :ref:`cantus headers` for more information about headers
 relevant to searching).
