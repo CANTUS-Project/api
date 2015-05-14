@@ -126,17 +126,20 @@ Servers MUST use this header to indicate whether "resources" members are include
 X-Cantus-Fields
 ^^^^^^^^^^^^^^^
 
-Clients MAY use this header to request only certain fields. Servers MUST include this header, which
-lists the fields that are present in *all* returned resources. Fields that are only present in some
-of the returned resources belong in the :http:header:`X-Cantus-Extra-Fields` header. Refer also to
-the :ref:`cantus header example`.
+Clients MAY use this header to request only certain fields in the response. Servers MUST include
+this header, which lists the fields that are present in *all* returned resources. Fields that are
+only present in some of the returned resources belong in the :http:header:`X-Cantus-Extra-Fields`
+header. For both headers, if no field applies, the SHALL omit the header entirely.
+
+Both headers are a comma-separated list, like ``id, name, description``.
+
+Refer also to the :ref:`cantus header example`.
 
 X-Cantus-Extra-Fields
 ^^^^^^^^^^^^^^^^^^^^^
 
-A semicolon-separated list of resource fields. This has no meaning in a request, but a server MUST
-use this to indicate which fields were available for some, but not all, resources. Refer also to the
-:ref:`cantus header example`.
+If some, but not all, resources contain a field, the server MUST include that field name in this
+header. This field has no meaning in a request. Refer also to the :ref:`cantus header example`.
 
 X-Cantus-Total-Results
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -203,7 +206,7 @@ A response.
     Content-Length: xxx
     X-Cantus-Version: 1.0.0
     X-Cantus-Include-Resources: false
-    X-Cantus-Fields: id;incipit
+    X-Cantus-Fields: id,incipit
     X-Cantus-Extra-Fields: cantus_id
     X-Cantus-Total-Results: 10
     X-Cantus-Per-Page: 3
