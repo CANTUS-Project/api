@@ -119,7 +119,7 @@ a version called "3.2.6-test." Also refer to :ref:`version numbers`.
 X-Cantus-Include-Resources
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Clients MAY include this header in a requested, telling a server whether to include a "resources"
+Clients MAY include this header in a request, telling a server whether to include a "resources"
 member with hyperlinks to related resources. This can be "true" or "false" (but is case-insensitive).
 Servers MUST use this header to indicate whether "resources" members are included in a response.
 
