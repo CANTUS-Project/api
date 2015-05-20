@@ -166,11 +166,17 @@ it is likely to be capable of handling.
 X-Cantus-Page
 ^^^^^^^^^^^^^
 
-If :http:header:`X-Cantus-Per-Page` is non-zero, servers MUST and clients MAY include this header to
-indicate that the results should correspond to a particular sub-set of the full query. If a client
-provides a value for this header greater than :http:header:`X-Cantus-Total-Results` divided by
-:http:header:`X-Cantus-Per-Page` (i.e., greater than the total number of pages) the server MUST
-respond with `409 Conflict <https://tools.ietf.org/html/rfc7231#section-6.5.8>`_.
+If the :http:header:`X-Cantus-Per-Page` request header is non-zero, clients MAY include this header
+to indicate that the results should correspond to a particular sub-set of the full query. If a
+client provides a value for this header greater than the :http:header:`X-Cantus-Total-Results`
+response header divided by the :http:header:`X-Cantus-Per-Page` request header (i.e., greater than
+the total number of pages) the server MUST respond with
+`409 Conflict <https://tools.ietf.org/html/rfc7231#section-6.5.8>`_.
+
+If a query is successful, servers MUST include this header in responses to indicate the effective
+page of the results.
+
+Note that the first page is numbered ``1``, not ``0``.
 
 X-Cantus-Sort
 ^^^^^^^^^^^^^
