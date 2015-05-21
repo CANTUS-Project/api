@@ -217,7 +217,6 @@ Chant
     :>json string siglum: the "siglum" field of the corresponding "Source" resource
     :>json string proofreader: ``"display_name"`` of an "Indexer" resource
     :>json string melody_id: (will appear in ``"resources"`` after the first version)
-    :>json string source: the "name" field of the corresponding "Source" resource
     :>json string resources>source: URL to the containing "Source" resource
     :>json string resources>office: URL to the corresponding "Office"
     :>json string resources>genre: *not provided* (ask the "CantusID" resource)
