@@ -107,7 +107,11 @@ Cantus-Specific Extension Headers
 ---------------------------------
 
 These headers extend the HTTP and WebDAV standards in ways specific to the Cantus API. We create
-extension headers only when no sensible alternative is sensible.
+extension headers only when no existing solution is sensible.
+
+The server SHOULD return a `400 Bad Request <https://tools.ietf.org/html/rfc7231#section-6.5.1>`_
+response code for any Cantus-specific request headers that contain invalid values, rather than
+ignoring the invalid value and continuing.
 
 X-Cantus-Version
 ^^^^^^^^^^^^^^^^
@@ -181,12 +185,26 @@ Note that the first page is numbered ``1``, not ``0``.
 X-Cantus-Sort
 ^^^^^^^^^^^^^
 
-If the :http:header:`X-Cantus-Sort` is present in a request, it will contain a field name and
-direction indicator (``asc`` or ``desc``) separated by a semicolon. The field name may also be
-"relevance," the default value, which ranks search results by a server-determined relevance score.
-If the indicated field is not present in all sources, the server MAY choose another field by which
-to sort. For every search query, the server MUST include an :http:header:`X-Cantus-Sort` response
-header indicating the actual field and sort direction of the response.
+If the :http:header:`X-Cantus-Sort` is present in a request, it SHOULD contain a list of 2-tuples of
+field names and direction indicators (``asc`` or ``desc``) separated by a comma, each separated by a
+semicolon. (For example: ``incipit,asc`` or ``incipit,asc;feast,desc``). "Ascending" results put the
+numerical and textual results in canonical order (i.e., 1, 2, 3; and A, B, C). "Descending" is the
+opposite. Only the following characters are permitted: upper- and lower-case letters, ``_``, ``,``,
+``;``, and spaces.
+
+If a request does not have a :http:header:`X-Cantus-Sort` header, the server MUST order results
+according to an appropriate relevance score, with the most relevant results returned first.
+
+If a field is not present in all (or any) search results, the server MAY choose a different field by
+which to sort, return a `409 Conflict <https://tools.ietf.org/html/rfc7231#section-6.5.8>`_
+response, or simply use the partially missing field regardless.
+
+For every request including a :http:header:`X-Cantus-Sort` header, the server MUST include an
+equivalent response header to indicate the actual sort field and direction used.
+
+.. note:: For search queries, clients are recommended to trust the default relevance-based sort
+    order. Cantus servers should be optimized to provide the most relevant results by default. This
+    header makes the most sense when a user wants to browse all of a category.
 
 .. _`X-Cantus-Search-Help`:
 
@@ -237,3 +255,6 @@ A response.
          "cantus_id": "002685",
         }
     }
+
+TODO: add an example of searching/sorting to get all the chants in a single source, ordered by
+folio and sequence
