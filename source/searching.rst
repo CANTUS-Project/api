@@ -3,9 +3,8 @@
 How to Search
 =============
 
-Every resource type that may be searched will provide a "search" URL in its "resources" response.
-As the "browsing" URL is the resource type prefixed with ``"browse_"``, the "searching" URL is the
-resource type prefixed with ``"search_"``. For example, you may submit a request to the root URL:
+Every resource type that may be searched will provide a "search" URL in the "resources" response to
+the server's root URL. For example, you may submit a request to the root URL:
 
 .. sourcecode:: http
 
@@ -20,43 +19,47 @@ And receive a response like this:
     ...
     {
         "resources": {
-            "browse_genres": "/genres/id?/",
-            "search_genres": "/genres/search/id?/",
-            ...
+            "browse": {
+                "genre": "/genres/",
+                },
+            "search": {
+                "genre": "/genres/search",
+                },
+            "view": {
+                "genre": "/genre-view/id?"
+                },
         }
     }
 
-Thus in this case clients should use the ``/genres/search/`` URL to search for a genre, and the
-``/genres/search/id?/`` URL to search among Chants associated with a specific genre. Search
+Thus in this case clients should use the ``/genres/search/`` URL to search for a genre. Search
 requests are submitted as a ``GET`` request to the indicated URL, with a specially-formatted request
 body and optional headers. (Refer to :ref:`cantus headers` for more information about headers
 relevant to searching).
 
-Knowing which search URL to use can seem confusing; here are some simple guidelines:
+Searching Across Resource Types
+-------------------------------
 
-    #. If you want one resource type, search with its URL. For example, use ``/(search_genres)/``
-       to find a genre).
-    #. To limit results to those associated with a particular resource, use that resource's search
-       URL. For example, use ``/(search_genres)/(antiphon_genre_id)/`` to search among the Chants
-       that are antiphons.
-    #. To limit results with multiple resources, choose one of the above methods. For example, to
-       find Easter antiphons, you could:
+The Cantus API allows one additional type of search: where the desired resource type is unknwon. The
+URL to use for these searches will be provided by the ``["search"]["all"]`` member, like this:
 
-       - use the ``/(search_chants)/`` URL and provide the limiting genre and feast in the request body,
-       - use ``/(search_genres)/`` with an "id" and provide the feast "id" in the request body, or
-       - use ``/(search_feasts)/`` with an "id" and provide the genre "id" in the request body.
+.. sourcecode:: http
 
-       The results are the same in all three situations, so your choice is merely a preference.
-    #. If you do not know the limiting "id" then try to use a name-based sub-query as described
-       :ref:`below <name-based filter>`.
+    HTTP/1.1 200 OK
 
-.. note::
-
-    An Idea for the Future
-
-    Arbitrarily nestable search URLs. For example, ``/(search_sources)/123/(search_offices)/63/``
-    would return all the Chants in a book that are in a particular office. You can already get the
-    same functionality by using the search request body, but maybe this is more convenient.
+    ...
+    {
+        "resources": {
+            "browse": {
+                ...
+                },
+            "search": {
+                "all": "/search",
+                },
+            "view": {
+                ...
+                },
+        }
+    }
 
 Search Request
 --------------
@@ -92,7 +95,7 @@ type---also have a variant suffixed with "_id"to allow more accurate :ref:`id-ba
 those resources, ID-based filtering is preferred; otherwise a :ref:`name-based filter` will
 happen.
 
-For example, a query at the ``/(search_sources)/`` URL may use the following content-based fields:
+For example, a query at the ``/(search.source)/`` URL may use the following content-based fields:
 id, title, siglum, provenance_detail, date, source_status_desc, summary, liturgical_occasions,
 description, indexing_notes, and indexing_date. In addition, the following fields correspond to
 another resource, so they may be used in ID-based filtering with an "_id" suffix, or in a name-based
@@ -100,7 +103,7 @@ sub-query: rism, provenance, century, notation_style, editors, indexers, proofre
 and source_status.
 
 In all cases, any unknown, invalid, or inapplicable data are ignored. If all data are ignored, an
-empty result body will be provided. For example, a search to the ``/(search_sources)/`` URL for
+empty result body will be provided. For example, a search to the ``/(search.source)/`` URL for
 ``{'query': '+city:Waterloo'}`` will always return no results because Source resources do not have
 a "city" field.
 
@@ -176,7 +179,7 @@ antiphons that mention "jesus" in the incipit, you might submit this query:
 
 .. sourcecode:: http
 
-    GET /(search_chants)/ HTTP/1.1
+    GET /(search.chant)/ HTTP/1.1
 
     {
         "incipit": "jesus",
@@ -191,21 +194,21 @@ submitting the following three queries:
 
 .. sourcecode:: http
 
-    GET /(search_feasts)/ HTTP/1.1
+    GET /(search.feast)/ HTTP/1.1
 
     {"name": "pascha"}
     <!-- returns one feast with an id of "08020100" -->
 
 .. sourcecode:: http
 
-    GET /(search_genres)/ HTTP/1.1
+    GET /(search.genre)/ HTTP/1.1
 
     {"name": "antiphon"}
     <!-- returns one genre with an id of "422" -->
 
 .. sourcecode:: http
 
-    GET /(search_chants)/ HTTP/1.1
+    GET /(search.chant)/ HTTP/1.1
 
     {
         "incipit": "jesus",

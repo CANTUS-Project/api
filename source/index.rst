@@ -34,15 +34,57 @@ A Note about URLs
 Throughout this document, URLs are usually indicated in a generic format, to emphasize their
 lack of importance in the API's operation. For this reason, domain names are usually omitted so
 that URLs begin with ``/``. In addition, most URLs contain parenthesized parts, as in
-``/(browse_chants)/``, to indicate that server implmentations may change actual URLs arbitrarily,
-so clients must determine a resource's URL dynamically at runtime.
+``/(browse.chant)/``, to indicate that server implmentations may change actual URLs arbitrarily,
+so clients must determine all URLs dynamically at runtime by consulting the ``"resources"`` member
+of response bodies.
 
-Servers MUST provide clients with relevant URLs in known locations as indicated throughout the API.
-For example, the ``/(browse_chants)/`` URL is provided as part of the response body to a GET request
-to the root URL, as specified in the :ref:`resource types` section.
+For this reason, servers MUST provide clients with relevant URLs in known locations as indicated
+throughout the API. In general, there are three *actions* to expect for every resource *type*:
 
-TODO: ensure this is clear enough for people who aren't used to it; this section has to answer the
-    question "how do I know where to find the URL for a thing?"
+    - browse: to access a sortable, paginated list of all resources of a given type.
+    - view: to access a specific
+    - search: blah
+
+Requests to the root URL (i.e., ``/`` as in ``https://abbott.cantusproject.org/``) will enumerate
+the URLs for all three actions for every resource type in the following way:
+
+.. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Location (server_address)/
+    ...
+
+    {
+        "resources":
+            {
+                "browse": {
+                    "chant": "/chants",
+                    "feast": "/browse/others/feasts/"
+                    },
+                "view": {
+                    "chant": "/view/chant/id?",
+                    "feast": "/view/id?/feast/"
+                    },
+                "search": {
+                    "chant": "/search_chants",
+                    "feast": "/f/se"
+                    }
+            }
+    }
+
+As you can see, the URLs provided in this example response body are highly irregular, and represent
+poor design desicions on the part of the server implementor. Yet because the URLs are provided in a
+consistent manner, Cantus user agents may still navigate the database with relative ease. The URL
+to use when viewing a specific chant, for instance, will always be available from the
+``['resources']['view']['chant']`` member in the response body for the server's root URL.
+
+There are a few other points to note:
+
+    - URLs to related resources will always be held in the ``"resources"`` member of a response
+      body, for every resources, throughout the Cantus API.
+    - In the ``"resources"`` member, resource types are always in the singular form.
+    - "View" URLs will contain the string ``id?``, which should be replaced with the "id" of the
+      resource the user agent wishes to access.
 
 Development Plan
 ^^^^^^^^^^^^^^^^
@@ -83,7 +125,7 @@ expected members in the JSON-formatted response body.
 Beacuse this API is designed with the "REST" principles in mind, every session of interaction begins
 with a ``GET`` request to the root URL, written in this documentation as ``/``. The response body
 indicates the URL path to use in constructing URLs of various resource types. An abbreviated sample
-interaction go like this.
+interaction goes like this.
 
 Request:
 
@@ -100,9 +142,10 @@ Response:
 
     {
         "resources": {
-            "browse_sources": "/sources/id?",
-            "browse_feasts": "/feasts/id?",
-            "browse_chants": "/chants/id?",
+            "browse": {
+                "source": "/sources/",
+                "feast": "/feasts/",
+                "chant": "/chants/",
             ...
         }
     }

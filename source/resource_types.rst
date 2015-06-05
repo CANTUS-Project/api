@@ -23,17 +23,24 @@ You submit a request to the root URL:
     ...
     {
         "resources": {
-            "browse_genres": "/genres/id?",
+            "browse": {
+                "genre": "/genres/",
+                ...
+                },
+            "view": {
+                "genre": "/view_genre/id?",
+                ...
+                },
             ...
         }
     }
 
-To retrieve a list of all genres, you would therefore submit a ``GET`` request to ``/genres/``. To
-access information about a particular genre, say genre 25, submit a request to ``/genres/25/``. On
-a different deployment, or with a different implementation or version of the Cantus server, the URL
-path may be entirely different (e.g., ``/genre-browser/id?``). However, if ``"browse_genres"``
+To retrieve a paginated list of all genres, you would submit a ``GET`` request to ``/genres/``. To
+access information about a particular genre, say genre 25, submit a request to ``/view_genre/25/``.
+On a different deployment, or with a different implementation or version of the Cantus server, the
+URL path may be entirely different (e.g., ``/genre-browser``). However, if ``["browse"]["genres"]``
 appears in the ``"resources"`` member of a response, it will always point to the list of genres, and
-substituting a value for ``id?`` will always give information related to a specific genre.
+``["view"]["genres"]`` will always give information related to a specific genre.
 
 While the URLs are unlikely to change frequently (possibly never) in the above example, in the
 following example it is much more important to pay careful attention to using the URLs provided by
@@ -72,7 +79,7 @@ You submit a query about "Benedicamus patrem et filium" chants:
         }
     }
 
-While the Cantus server has cached some metadata about all the chants, you can see from the privded
+While the Cantus server has cached some metadata about all the chants, you can see from the provided
 URLs that resource ``"pem-8669"`` is actually hosted on the Portuguese Early Music server, and we
 refer the client to that URL for further information. Note also that the "id" field is not
 consistent between the two servers: in this case, the ``uwaterloo.ca`` Cantus server has prefixed
@@ -87,10 +94,10 @@ Cantus API. For more information, refer to :ref:`multiserver`.
 About the "id" Field
 --------------------
 
-In resource types for which ``id?`` makes up part of the URL, you would form the URL for a specific
-resource by substituting that resource's unique "id" value in that part of the URL. **Always remove
-the question mark from the URL.** Cantus "id" values may consist of any alphanumeric character
-valid in a URL, plus hyphens and underscores.
+For "view" URLs, where ``id?`` makes part of the server-provided URL, user agents MUST form a full
+URL by substituting a resource's unique "id" value in that part of the URL. The full three-character
+``id?`` string must be removed from the URL. Cantus API "id" values may consist of any alphanumeric
+character valid in a URL, plus hyphens and underscores.
 
 The following points also apply:
 
@@ -170,10 +177,13 @@ Bodies <response bodies>`_ section for more information on how to make this bit 
 CantusID
 ^^^^^^^^
 
-.. http:get:: /(browse_cantusid)/(string:id)/
+.. http:get:: /(view.cantusid)/(string:id)/
 
-    A "CantusID" record is a chant in general, that exists in many different Source records. These
-    will be available at the path indicated in the ``"browse_cantusid"`` member.
+    A "Cantus ID" resource is an abstraction across multiple actual chants. These are available at
+    the URLs indicated by ``["view"]["cantusid"]`` and ``["browse"]["cantusid"]``.
+
+    Note that the "incipit" and "full_text" fields are not necessarily the same across all chants
+    with the same Cantus ID and therefore may not be correct for a particular chant.
 
     :>json string id: the Cantus ID of this resourse
     :>json string genre: ``"name"`` field of the corresponding "Genre" resource
@@ -185,13 +195,10 @@ CantusID
 Chant
 ^^^^^
 
-"Chant" records are available at the URL indicated by ``"browse_chants"``. Initially this will be
-``/chants/id?/``.
+.. http:get:: /(view.chant)/(string:id)/
 
-.. http:get:: /(browse_chants)/(string:id)/
-
-    A "Chant" record is a chant written in a Source. These will be avialable at the path indicated
-    in the ``"browser_chants"`` member.
+    A "Chant" record is a chant written in a Source. These are available at the URLs indicated by
+    ``["view"]["chant"]`` and ``["browse"]["chant"]``.
 
     :>json string id:
     :>json string incipit:
@@ -312,10 +319,10 @@ Chant
 Source
 ^^^^^^
 
-.. http:get:: /(browse_sources)/(string:id)/
+.. http:get:: /(view.source)/(string:id)/
 
-    A "Source" record is for a collection of folia containing chants (usually a book). These will
-    be avialable at the path indicated in the ``"browser_indexers"`` member.
+    A "Source" record is for a collection of folia containing Chants (usually a book). These are
+    be avialable at the URLs indicated by ``["view"]["source"]`` and ``["browse"]["source"]``.
 
     :>json string id: The "id" of this resource.
     :>json string title: Full Manuscript Identification (City, Archive, Shelf-mark)
@@ -411,11 +418,11 @@ Source
 Indexer
 ^^^^^^^
 
-.. http:get:: /(browse_indexers)/(string:id)/
+.. http:get:: /(view.indexer)/(string:id)/
 
     An "Indexer" corresponds to an agent who has entered or modified data in the Cantus Database
-    (usually a human). These will be avialable at the path indicated in the ``"browser_indexers"``
-    member.
+    (usually a human). These are avialable at the URLs ``["view"]["indexer"]`` and
+    ``["browse"]["indexer"]``.
 
     :>json string id: The "id" of this resource.
     :>json string display_name: The indexer's name, as displayed.

@@ -57,7 +57,7 @@ Example:
 
 .. sourcecode:: http
 
-    OPTIONS /(browse_chants) HTTP/1.1
+    OPTIONS /(browse.chant) HTTP/1.1
 
 .. sourcecode:: http
 
