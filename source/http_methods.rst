@@ -46,9 +46,8 @@ TODO: write this section
 SEARCH
 ------
 
-The SEARCH method, defined in `RFC 5323 <http://tools.ietf.org/html/rfc5323>`_, will be supported
-in the first WebDAV-capable version of the Cantus API. For now, please use the search URLs described
-in :ref:`searching`.
+The SEARCH method, defined in `RFC 5323 <http://tools.ietf.org/html/rfc5323>`_, may be supported in
+future versions of the Cantus API. For now, please use the search URLs described in :ref:`searching`.
 
 ..
     ************** NOTE ************* all this bit is commented and won't appear in output

@@ -47,11 +47,10 @@ TODO: ensure this is clear enough for people who aren't used to it; this section
 Development Plan
 ^^^^^^^^^^^^^^^^
 
-The first "full" release of the Cantus API, version 1.0, will be primarily based on HTTP, and will
-allow read-only access to resources. The second "full" release will add read-only WebDAV features;
-the third will amend this with creation and editing capabilities. If we can add WebDAV without
-breaking backward compatibility, these releases will be versions 1.1 and 1.2, respectively; otherwise
-2.0 and 2.1.
+The first "full" release of the Cantus API, version 1.0, is based on HTTP, and allows read-only
+access to resources. The second "full" release will add creation and editing capabilities to the
+API. We will aim for interoperability between these versions to the fullest extent possible, but
+some backward-incompatible changes may be required in the second version.
 
 Relationship to Existing Standards
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -59,10 +58,13 @@ Relationship to Existing Standards
 The Cantus API implements parts of the HTTP/1.1bis standard (IETF RFCs
 `7230 <https://tools.ietf.org/html/rfc7230>`_, `7231 <https://tools.ietf.org/html/rfc7231>`_,
 `7232 <https://tools.ietf.org/html/rfc7232>`_, `7234 <https://tools.ietf.org/html/rfc7234>`_, and
-`7237 <https://tools.ietf.org/html/rfc7237>`_). In the future, the API will also implement parts of
-`RFC 4918 <https://tools.ietf.org/html/rfc>`_ and `5323 <http://tools.ietf.org/html/rfc5323>`_
-standards for WebDAV, plus `RFC 7235 <http://tools.ietf.org/html/rfc7235>`_ and
-`7236 <http://tools.ietf.org/html/rfc7236>`_ for user authentication.
+`7237 <https://tools.ietf.org/html/rfc7237>`_).
+
+.. possible future standards:
+    webdav: `RFC 4918 <https://tools.ietf.org/html/rfc>`_
+            `5323 <http://tools.ietf.org/html/rfc5323>`_
+    authentication: `RFC 7235 <http://tools.ietf.org/html/rfc7235>`_
+                     `7236 <http://tools.ietf.org/html/rfc7236>`_
 
 This document supplements the IETF memoranda to describe what functionality is to be implemented in
 Cantus software, and what behaviour to expect. In particular, the Cantus API defines

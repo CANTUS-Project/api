@@ -77,11 +77,12 @@ TODO: write other things here
 
 The "cantus" query grammar is inspired by Solr's "standard query parser," but differs notably.
 Unlike with Solr, query parameters are part of the request body rather than the URL---as
-required by the HTTP ``SEARCH`` method. Also, query parameters are modified and added by the
-server implementation before being sent to Solr, in order to fetch the expected results. Therefore,
-even if a server implementation does use Solr, which is not required by this API, clients should not
-expect their query will be submitted to the Solr server verbatim. This query grammar will be
-retained when the Cantus API becomes WebDAV compatible.
+required by the HTTP ``SEARCH`` method, which the API may use in a future version. Also, query
+parameters are modified and added by the server implementation before being sent to Solr, in order
+to fetch the expected results. Therefore, even if a server implementation does use Solr, which is
+not required by this API, clients should not expect their query will be submitted to the Solr
+server verbatim. This query grammar will be retained even if additional grammars become available
+in future versions of the API.
 
 All parameters belong in the "query" member of the request body, described in :ref:`query string syntax`.
 

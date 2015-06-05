@@ -13,9 +13,6 @@ The HTTP/1.1bis headers are specified in `RFC 7230, S. 3.2 <https://tools.ietf.o
 The IANA also maintains a
 `list of standard headers <https://www.iana.org/assignments/message-headers/message-headers.xhtml>`_.
 
-List of Headers We Should Have:
-    - also whatever I showed in the examples in "index.rst"
-
 Permanent Headers
 -----------------
 
@@ -29,10 +26,10 @@ Accept
 servers are only required to serve resources in JSON format. Refer to the `Content-Type`_ section
 for more information.
 
-In accordance with the WebDAV specification, the ``application/xml`` and ``text/xml`` foramts
-(specified in `RFC 7303 <http://tools.ietf.org/html/rfc7303>`_) will be supported as defaults in a
-future version of the Cantus API. Therefore, clients MUST provide the :http:header:`Accept`
-header for forward compatibility.
+While, in accordance with RFC 7231, user agents are not required to include a :http:header:`Accept`
+header, the API may provide additional response formats in the future (in particular
+``application/xml`` and ``text/xml``) and may even change the default format, so user agents are
+strongly recommend to specify :http:header:`Accept` to ensure forward compatibility.
 
 Accept-Charset
 ^^^^^^^^^^^^^^
@@ -94,10 +91,10 @@ almost invariably be ``utf-8``, it may be possible to provide other character se
 The media-type will be ``application/json``, indicating a message body encoded in JSON, as specified
 in `RFC 7158 <http://tools.ietf.org/html/rfc7158>`_.
 
-In accordance with the WebDAV specification, the ``application/xml`` and ``text/xml`` foramts
-(specified in `RFC 7303 <http://tools.ietf.org/html/rfc7303>`_) will be supported as defaults in a
-future version of the Cantus API. Therefore, clients MUST provide the :http:header:`Accept`
-header for forward compatibility.
+Future versions of the API may permit or require different response formats, in particular
+``application/xml`` and ``text/xml``, and may also change the default response format. Therefore,
+user agents are strongly recommended to provide the :http:header:`Accept` header for forward
+compatibility.
 
 .. Implementation note: Tornado handles the "Content-Type" header automatically.
 
@@ -106,8 +103,8 @@ header for forward compatibility.
 Cantus-Specific Extension Headers
 ---------------------------------
 
-These headers extend the HTTP and WebDAV standards in ways specific to the Cantus API. We create
-extension headers only when no existing solution is sensible.
+These headers extend the HTTP standard in ways specific to the Cantus API. We create extension
+headers only when no existing solution is sensible.
 
 The server SHOULD return a `400 Bad Request <https://tools.ietf.org/html/rfc7231#section-6.5.1>`_
 response code for any Cantus-specific request headers that contain invalid values, rather than
