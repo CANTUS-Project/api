@@ -64,9 +64,8 @@ URL to use for these searches will be provided by the ``["search"]["all"]`` memb
 Search Request
 --------------
 
-With the possible exception of a resource ID present in the URL, search parameters are carried in
-the request body. Some additional parameters, used to change the format of results, are carried in
-headers, as specified below in :ref:`search request headers`.
+Search parameters are carried in the request body. Some additional parameters, used to change the
+format of results, are carried in headers, as specified below in :ref:`search request headers`.
 
 The format of a search request body depends on the search grammar. At present, the only supported
 grammar is :ref:`described below <cantus query grammar>`.
@@ -228,61 +227,59 @@ problem, ID-based filtering is preferred whenever a resource "id" is available.
 Use Headers to Change the Result Format
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-asdf
+TODO: write this part
 
 Search Result
 -------------
 
-asdf
+TODO: write this part
 
 Resource-Specific Information
 -----------------------------
 
-Query without an "id" string to search amongst the resources of that type (e.g., to find a
-particular feast use ``/(search_feasts)/``), or with an "id" string to find other resources
-associated with a particular resource (e.g., to find all the chants that happen at Compline).
+.. http:get:: /(search.all)/
 
-.. http:get:: /(search_indexers)/(string:id)/
+    Find resources of any type that match the given criteria.
 
-    With an "id" string, finds all the Chant and Source resources created, edited, or indexed by
-    an Indexer.
+.. http:get:: /(search.indexer)/
 
-.. http:get:: /(search_chants)/(string:id)/
+    Find :ref:`indexer resource type` resources that match the given criteria.
 
-    With an "id" string, finds all the other resources associated with a Chant (i.e., the Source,
-    the Office, the Siglum, and so on).
+.. http:get:: /(search.chant)/
 
-.. http:get:: /(search_sources)/(string:id)/
+    Find :ref:`chant resource type` resources that match the given criteria.
 
-    With an "id" string, finds all the Chant resources in this Source.
+.. http:get:: /(search.source)/
 
-.. http:get:: /(search_centuries)/(string:id)/
+    Find :ref:`source resource type` resources that match the given criteria.
 
-    With an "id" string, finds all the Chant and Source resources in a century.
+.. http:get:: /(search.century)/
 
-.. http:get:: /(search_feasts)/(string:id)/
+    Find Century resources that match the given criteria.
 
-    With an "id" string, finds all the Chants associated with a feast.
+.. http:get:: /(search.feast)/
 
-.. http:get:: /(search_genres)/(string:id)/
+    Find :ref:`feast resource type` resources that match the given criteria.
 
-    With an "id" string, finds all the Chants in a genre.
+.. http:get:: /(search.genre)/
 
-.. http:get:: /(search_notations)/(string:id)/
+    Find :ref:`genre resource type` resources that match the given criteria.
 
-    With an "id" string, finds all the Sources written with a particular notation style.
+.. http:get:: /(search.notation)/
 
-.. http:get:: /(search_offices)/(string:id)/
+    Find Notation resources that match the given criteria.
 
-    With an "id" string, finds all the Chants that happen in an office.
+.. http:get:: /(search.office)/
 
-.. http:get:: /(search_provenances)/(string:id)/
+    Find Office resources that match the given criteria.
 
-    With an "id" string, finds all the Chants and Sources from a monastery.
+.. http:get:: /(search.provenance)/
 
-.. http:get:: /(search_sigla)/(string:id)/
+    Find Provenance resources that match the given criteria.
 
-    With an "id" string, finds all the Chants and Sources with a siglum.
+.. http:get:: /(search.siglum)/
+
+    Find Siglum resources that match the given criteria.
 
 Unsearchable Resource Types
 ---------------------------
