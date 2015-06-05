@@ -117,45 +117,83 @@ this category will not have fields that cross-reference another resource. Simple
 to have fewer fields, and are not expected to change often during the lifetime of the
 database---perhaps never.
 
-Each of the resources in this category will have two members in the JSON response body: ``"name"``,
-which provides a human-readable name for that resource (e.g., "14th century" for a resource of the
-"centuries" type); and ``"resources"``, which lists URLs to Chant, Source, or Indexer resources that
-are classified as that type. They may also have a ``"description"``.
+Most resources in this category have two fields: ``"name"``, which is a human-readable name for
+that resource (e.g., "14th century" for a resource of the "century" type); and ``"description"``,
+which provides a brief explanation of the resource.
 
 From the home URL (``/``), all of the following terms may be found in the ``"resources"`` member of
 the response body. Resource "id" values are described in :ref:`resource ids` above. You may
-discover the valid ``"id"`` values by visiting the generic URL (e.g., by visiting
-/**(** *browse_centuries* **)**/ rather than /**(** *browse_centuries* **)**/**(** *id* **)**).
+discover the valid ``"id"`` values by visiting the "browse" URL (e.g., ``["browse"]["century"]``
+rather than ``["view"]["century"]``).
 
-+----------------------+----------------------------+
-| Description          | JSON Member                |
-+======================+============================+
-| Century              | ``"browse_centuries"``     |
-+----------------------+----------------------------+
-| Feasts               | ``"browse_feasts"``        |
-+----------------------+----------------------------+
-| Genres               | ``"browse_genres"``        |
-+----------------------+----------------------------+
-| Notation             | ``"browse_notations"``     |
-+----------------------+----------------------------+
-| Office               | ``"browse_offices"``       |
-+----------------------+----------------------------+
-| Portfolio categories | ``"browse_portfolia"``     |
-+----------------------+----------------------------+
-| Provenance           | ``"browse_provenances"``   |
-+----------------------+----------------------------+
-| RISM Sigla           | ``"browse_sigla"``         |
-+----------------------+----------------------------+
-| Segment              | ``"browse_segments"``      |
-+----------------------+----------------------------+
-| Source status        | ``"browse_source_statii"`` |
-+----------------------+----------------------------+
++----------------------+-------------------------------+
+| Description          | JSON Member                   |
++======================+===============================+
+| Century              | ``["view"]["century"]``       |
++----------------------+-------------------------------+
+| Notation             | ``["view"]["notation"]``      |
++----------------------+-------------------------------+
+| Office               | ``["view"]["office"]``        |
++----------------------+-------------------------------+
+| Portfolio categories | ``["view"]["portfolio"]``     |
++----------------------+-------------------------------+
+| Provenance           | ``["view"]["provenance"]``    |
++----------------------+-------------------------------+
+| RISM Sigla           | ``["view"]["siglum"]``        |
++----------------------+-------------------------------+
+| Segment              | ``["view"]["segment"]``       |
++----------------------+-------------------------------+
+| Source status        | ``["view"]["source_status"]`` |
++----------------------+-------------------------------+
 
-Notes
+Three simple resource types use additional fields, or different fields, than those described above.
+
+.. _`indexer resource type`:
+
+Indexer
+^^^^^^^
+
+.. http:get:: /(view.indexer)/(string:id)/
+
+    An "Indexer" corresponds to a human who has entered or modified data in the Cantus Database.
+    The set of fields is entirely different from other simple resource types.
+
+    :>json string id: The "id" of this resource.
+    :>json string display_name: The indexer's name, as displayed.
+    :>json string given_name: The indexer's given name.
+    :>json string family_name: The indexer's family name.
+    :>json string institution: The indexer's associated university or research institution.
+    :>json string city: The city where the indexer lives.
+    :>json string country: The country where the indexer lives.
+
+.. _`feast resource type`:
+
+Feast
 ^^^^^
 
-- Every "genre" also has a "mass_or_office" field in the Solr database.
-- Every "feast" MAY also have "date" and "feast_code" fields.
+.. http:get:: /(view.feast)/(string:id)/
+
+    Feast resources add two fields over the standard set for "simple" resources.
+
+    :>json string id: The "id" of this resource.
+    :>json string name: Human-readable name for the feast.
+    :>json string description: Brief explanation of the feast.
+    :>json string date: Date on which the feast occurs.
+    :>json string feast_code: Standardized feast code for the feast.
+
+.. _`genre resource type`:
+
+Genre
+^^^^^
+
+.. http:get:: /(view.genre)/(string:id)/
+
+    Genre resources add one field over the standard set for "simple" resources.
+
+    :>json string id: The "id" of this resource.
+    :>json string name: Human-readable name for the genre.
+    :>json string description: Brief explanation of the genre.
+    :>json string mass_or_office: A case-insensitive string, either ``"mass"`` or ``"office"``.
 
 .. _`complex resource types`:
 
@@ -234,86 +272,6 @@ Chant
     :>json string resources>drupal_path: URL to the Chant resource on the Drupal website
     :>json string resources>cantus_id: URL to the corresponding "CantusID" resource
 
-..
-    TODO: do we need a link in "resources" to all chants with the same "incipit" field? I would
-    rather not do that, because there isn't an "incipit" resource, and there may be quite a lot of
-    results, so it seems more like something you should SEARCH for... even though it would be a
-    straight-forward SEARCH that the user interface may be able to offer with a single click.
-    Anyway, point is that it's a lot of things, it's not a DB cross-reference, and it's to things
-    that aren't sensibly *part of* the Chant itself.
-
-..
-    This table is for the developers' reference. It doesn't appear in the rendered documentation.
-
-    TODO: why does "cantus_id" appear twice? Which are we actually using?
-
-    +-----------------------------+-----------------------------------+----------------------+
-    | Field Name in MySQL         | Field Name in Drupal              | Field Name in JSON   |
-    +=============================+===================================+======================+
-    | title                       | Incipit                           | incipit              |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_source                | Source                            | source               |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_marginalia            | Marginalia                        | marginalia           |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_folio                 | Folio                             | folio                |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_sequence              | Sequence                          | sequence             |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_office                | Office                            | office               |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_mc_genre              | Genre                             | genre                |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_position              | Position                          | position             |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_cantus_id             | Cantus ID                         | cantus_id            |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_mc_feast              | Feast                             | feast                |
-    +-----------------------------+-----------------------------------+----------------------+
-    |                             |                                   | feast_desc           |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_mode                  | Mode                              | mode                 |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_differentia           | Differentia                       | differentia          |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_finalis               | Finalis                           | finalis              |
-    +-----------------------------+-----------------------------------+----------------------+
-    | body                        | Full text (standardized spelling) | full_text            |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_full_text_ms          | Full text (MS spelling)           | full_text_manuscript |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_simssa_fulltext       | Full text (SIMSSA use)            | full_text_simssa     |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_volpiano              | Volpiano                          | volpiano             |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_image_link_chant      | Image link                        |                      |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_notes                 | Indexing notes                    | notes                |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_cao_concordances      | CAO Concordances                  | cao_concordances     |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_siglum_chant          | Siglum                            | siglum               |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_proofread_by          | Proofread by                      | proofreader          |
-    +-----------------------------+-----------------------------------+----------------------+
-    | path                        | URL path settings                 |                      |
-    |                             |                                   |                      |
-    +-----------------------------+-----------------------------------+----------------------+
-    | ``field_nid_old_``          | NID (old)                         |                      |
-    +-----------------------------+-----------------------------------+----------------------+
-    | ``field_user_old_``         | User (old)                        |                      |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_fulltext_proofread    | Fulltext proofread                |                      |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_ms_fulltext_proofread | MS Fulltext proofread             |                      |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_volpiano_proofread    | Volpiano proofread                |                      |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_cantus_id_temp        | Cantus ID (temp)                  | cantus_id            |
-    +-----------------------------+-----------------------------------+----------------------+
-    | field_melody_id             | Melody ID                         | melody_id            |
-    +-----------------------------+-----------------------------------+----------------------+
-
 .. _`source resource type`:
 
 Source
@@ -354,106 +312,3 @@ Source
     :>json string resources>source_status:
     :>json string resources>image_link: Root URL linking to images for the entire source.
     :>json string resources>drupal_path: URL to this Source on the "old" Drupal site.
-
-..
-    This table is for the developers' reference. It doesn't appear in the rendered documentation.
-
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | Field Name in MySQL        | Field Name in Drupal           | Field Name in JSON   | ``"resources"``? | Comments                                                  |
-    +============================+================================+======================+==================+===========================================================+
-    | title                      | Full Manuscript Identification | title                |                  |                                                           |
-    |                            | (City, Archive, Shelf-mark)    |                      |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_rism                 | RISM                           | rism                 |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_siglum               | Siglum                         | siglum               |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_provenance_tax       | Provenance                     | provenance           | yes              |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_provenance           | Provenance notes               | provenance_detail    |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_date                 | Date                           | date                 |                  | e.g., "1300s"                                             |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_century              | Century                        | century              | yes              |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_notation             | Notation                       | notation_style       | yes              |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_editors              | Editors                        | editors              | yes              | list of "title" of Indexers who edited the manuscript; in |
-    |                            |                                |                      |                  | ``"resources"`` will be a list of URLs                    |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_indexer              | Indexer                        | indexers             | yes              | list of "title" of Indexers who entered the manuscript;   |
-    |                            |                                |                      |                  | in ``"resources"`` will be a list of URLs                 |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_proofreader          | Proofreader                    | proofreaders         | yes              | in ``"resources"`` will be a list of URLs                 |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_segment              | Segment                        | segment              | yes              |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_source_status        | Source status                  | source_status_desc   |                  | textual elaboration of "source_status"                    |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_source_status_tax    | Source status                  | source_status        | yes              |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_summary              | Summary                        | summary              |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_liturgical_occasions | Liturgical occasions           | liturgical_occasions |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | body                       | Description                    | description          |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_bibliography         | Selected bibliography          |                      |                  | ignored (Drupal seems to ignore it)                       |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_image_link           | Image link                     |                      | image_link       | will **only** appear in ``"resources"`` as the root URL   |
-    |                            |                                |                      |                  | for images for the entire Source                          |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_indexing_notes       | Indexing notes                 | indexing_notes       |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_indexing_date        | Indexing date                  | indexing_date        |                  |                                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | field_indexed_by           | Indexing notes (old)           |                      |                  | ignored ("old")                                           |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-    | path                       | URL path settings              |                      | drupal_path      | will **only** appear in ``"resources"`` as the URI of the |
-    |                            |                                |                      |                  | corresponding source in the Drupal website                |
-    +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
-
-.. _`indexer resource type`:
-
-Indexer
-^^^^^^^
-
-.. http:get:: /(view.indexer)/(string:id)/
-
-    An "Indexer" corresponds to an agent who has entered or modified data in the Cantus Database
-    (usually a human). These are avialable at the URLs ``["view"]["indexer"]`` and
-    ``["browse"]["indexer"]``.
-
-    :>json string id: The "id" of this resource.
-    :>json string display_name: The indexer's name, as displayed.
-    :>json string given_name: The indexer's given name.
-    :>json string family_name: The indexer's family name.
-    :>json string institution: The indexer's associated university or research institution.
-    :>json string city: The city where the indexer lives.
-    :>json string country: The country where the indexer lives.
-    :>json object resources: Links to other indexer who share the same characteristics.
-    :>json string resources>institution:
-    :>json string resources>city:
-    :>json string resources>country:
-
-..
-    This table is for the developers' reference. It doesn't appear in the rendered documentation.
-
-    +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+
-    | Field Name in MySQL       | Field Name in Drupal | Field Name in JSON | ``"resources"``? | Comments                                                  |
-    +===========================+======================+====================+==================+===========================================================+
-    | title                     | Name                 | display_name       |                  |                                                           |
-    +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+
-    | field_first_name          | First name           | given_name         |                  |                                                           |
-    +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+
-    | field_family_name         | Family name          | family_name        |                  |                                                           |
-    +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+
-    | field_indexer_institution | Institution          | institution        | yes              |                                                           |
-    +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+
-    | field_indexer_city        | City                 | city               | yes              |                                                           |
-    +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+
-    | field_indexer_country     | Country              | country            | yes              |                                                           |
-    +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+
-    | path                      | URL path settings    |                    | drupal_path      | will **only** appear in ``"resources"`` as the URI of the |
-    |                           |                      |                    |                  | corresponding source in the Drupal website                |
-    +---------------------------+----------------------+--------------------+------------------+-----------------------------------------------------------+
