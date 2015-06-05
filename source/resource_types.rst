@@ -109,10 +109,10 @@ The following points also apply:
   a Cantus server application. That is, the Cantus API does not guarantee uniqueness of "id" values
   across deployments.
 
-Simple Record Types
--------------------
+Simple Resource Types
+---------------------
 
-Unlike the types listed in the following section (:ref:`complex record types`) the resources in
+Unlike the types listed in the following section (:ref:`complex resource types`) the resources in
 this category will not have fields that cross-reference another resource. Simple resources also tend
 to have fewer fields, and are not expected to change often during the lifetime of the
 database---perhaps never.
@@ -155,12 +155,12 @@ Notes
 ^^^^^
 
 - Every "genre" also has a "mass_or_office" field in the Solr database.
-- Every "feast" may also have "date" and "feast_code" fields, though not for all records
+- Every "feast" MAY also have "date" and "feast_code" fields.
 
-.. _`complex record types`:
+.. _`complex resource types`:
 
-Complex Record Types
---------------------
+Complex Resource Types
+----------------------
 
 The following resource types (CantusID, Chant, Indexer, Source) hold many fields of information,
 some of which correspond to a "taxonomy" field given in the previous section.
@@ -172,7 +172,7 @@ delivered in the Cantus API; ``"resources"`` indicates whether a hyperlink to mo
 about that field's value *may* be included with a JSON response. Refer to the `Request and Response
 Bodies <response bodies>`_ section for more information on how to make this bit work right.
 
-.. _`cantusid record type`:
+.. _`cantusid resource type`:
 
 CantusID
 ^^^^^^^^
@@ -190,14 +190,14 @@ CantusID
     :>json string incipit: the chant's incipit with standardized spelling
     :>json string full_text: full text with standardized spelling
 
-.. _`chant record type`:
+.. _`chant resource type`:
 
 Chant
 ^^^^^
 
 .. http:get:: /(view.chant)/(string:id)/
 
-    A "Chant" record is a chant written in a Source. These are available at the URLs indicated by
+    A "Chant" resource is a chant written in a Source. These are available at the URLs indicated by
     ``["view"]["chant"]`` and ``["browse"]["chant"]``.
 
     :>json string id:
@@ -231,7 +231,7 @@ Chant
     :>json string resources>feast: URL to the corresponding "Feast" resource
     :>json string resources>image_link: URL to an image, or a Web page with an image, of this Chant
     :>json string resources>proofreader: URL to an "Indexer" resource
-    :>json string resources>drupal_path: URL to the Chant record on the Drupal website
+    :>json string resources>drupal_path: URL to the Chant resource on the Drupal website
     :>json string resources>cantus_id: URL to the corresponding "CantusID" resource
 
 ..
@@ -314,14 +314,14 @@ Chant
     | field_melody_id             | Melody ID                         | melody_id            |
     +-----------------------------+-----------------------------------+----------------------+
 
-.. _`source record type`:
+.. _`source resource type`:
 
 Source
 ^^^^^^
 
 .. http:get:: /(view.source)/(string:id)/
 
-    A "Source" record is for a collection of folia containing Chants (usually a book). These are
+    A "Source" resource is for a collection of folia containing Chants (usually a book). These are
     be avialable at the URLs indicated by ``["view"]["source"]`` and ``["browse"]["source"]``.
 
     :>json string id: The "id" of this resource.
@@ -413,7 +413,7 @@ Source
     |                            |                                |                      |                  | corresponding source in the Drupal website                |
     +----------------------------+--------------------------------+----------------------+------------------+-----------------------------------------------------------+
 
-.. _`indexer record type`:
+.. _`indexer resource type`:
 
 Indexer
 ^^^^^^^
