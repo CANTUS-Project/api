@@ -7,10 +7,10 @@ Resource Types
 ==============
 
 You must discover the URL paths to all resource types with the URLs provided by the server. However,
-resource types available in a context will always be named consistently. To help understand what
-these points mean, consider the following example.
+resource types available in a context will always be named consistently. Those names are given at
+the root URL as described in the :ref:`root url json specification`.
 
-You submit a request to the root URL:
+Consider the following example, of submitting a request to the root URL:
 
 .. sourcecode:: http
 
@@ -109,6 +109,8 @@ The following points also apply:
   a Cantus server application. That is, the Cantus API does not guarantee uniqueness of "id" values
   across deployments.
 
+.. _`simple resource types`:
+
 Simple Resource Types
 ---------------------
 
@@ -117,34 +119,24 @@ this category will not have fields that cross-reference another resource. Simple
 to have fewer fields, and are not expected to change often during the lifetime of the
 database---perhaps never.
 
-Most resources in this category have two fields: ``"name"``, which is a human-readable name for
-that resource (e.g., "14th century" for a resource of the "century" type); and ``"description"``,
-which provides a brief explanation of the resource.
+.. http:get:: /(view.simple_resource)/(string:id)/
 
-From the home URL (``/``), all of the following terms may be found in the ``"resources"`` member of
-the response body. Resource "id" values are described in :ref:`resource ids` above. You may
-discover the valid ``"id"`` values by visiting the "browse" URL (e.g., ``["browse"]["century"]``
-rather than ``["view"]["century"]``).
+    Most simple resources follow this pattern.
 
-+----------------------+-------------------------------+
-| Description          | JSON Member                   |
-+======================+===============================+
-| Century              | ``["view"]["century"]``       |
-+----------------------+-------------------------------+
-| Notation             | ``["view"]["notation"]``      |
-+----------------------+-------------------------------+
-| Office               | ``["view"]["office"]``        |
-+----------------------+-------------------------------+
-| Portfolio categories | ``["view"]["portfolio"]``     |
-+----------------------+-------------------------------+
-| Provenance           | ``["view"]["provenance"]``    |
-+----------------------+-------------------------------+
-| RISM Sigla           | ``["view"]["siglum"]``        |
-+----------------------+-------------------------------+
-| Segment              | ``["view"]["segment"]``       |
-+----------------------+-------------------------------+
-| Source status        | ``["view"]["source_status"]`` |
-+----------------------+-------------------------------+
+    :>json string id: The "id" of this resource.
+    :>json string name: Human-readable name for the resource.
+    :>json string description: Brief explanation of the resource.
+
+The following simple resource types use the default fields described above:
+
+    - century
+    - notation
+    - office
+    - portfolio categories
+    - provenance
+    - RISM siglum (*pl.* sigla)
+    - segment
+    - source status
 
 Three simple resource types use additional fields, or different fields, than those described above.
 

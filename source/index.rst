@@ -86,6 +86,79 @@ There are a few other points to note:
     - "View" URLs will contain the string ``id?``, which should be replaced with the "id" of the
       resource the user agent wishes to access.
 
+.. _`root url json specification`:
+
+Root URL JSON Specification
+***************************
+
+.. http:get:: /
+    :synopsis: Get URLs for database resources.
+
+    Fetch JSON object with URLs and URL patterns to access database records. All URLs are
+    transmitted as strings. The URL patterns have ``'id?'`` in the string, which must be replaced
+    with the :ref:`id <resource ids>` of a specific resource. All other URLs should be used wihtout
+    modification.
+
+    :>json object resources: URLs and URL patterns to database resources.
+    :>json object resources.browse: URL to retrieve all resources of a type.
+    :>json URL resources.browse.chant: URL for Chants.
+    :>json URL resources.browse.source: URL for Sources.
+    :>json URL resources.browse.cantusid: URL for Cantusids.
+    :>json URL resources.browse.indexer: URL for Indexers.
+    :>json URL resources.browse.feast: URL for Feasts.
+    :>json URL resources.browse.genre: URL for Genres.
+    :>json URL resources.browse.century: URL for Centuries.
+    :>json URL resources.browse.notation: URL for Notations.
+    :>json URL resources.browse.office: URL for an Offices.
+    :>json URL resources.browse.portfolio: URL for Portfolio Categories (portfolia).
+    :>json URL resources.browse.provenance: URL for Provenances.
+    :>json URL resources.browse.siglum: URL for RISM Siglums (sigla).
+    :>json URL resources.browse.segment: URL for Database Segments.
+    :>json URL resources.browse.status: URL for Source Statuses.
+    :>json object resources.view: URL patterns to retrieve single resources with a known "id."
+    :>json URL resources.view.chant: Pattern for a :ref:`chant resource type`.
+    :>json URL resources.view.source: Pattern for a :ref:`source resource type`.
+    :>json URL resources.view.cantusid: Pattern for a :ref:`cantusid resource type`.
+    :>json URL resources.view.indexer: Pattern for a :ref:`indexer resource type`.
+    :>json URL resources.view.feast: Pattern for a :ref:`feast resource type`.
+    :>json URL resources.view.genre: Pattern for a :ref:`genre resource type`.
+    :>json URL resources.view.century: Pattern for a :ref:`Century <simple resource types>`.
+    :>json URL resources.view.notation: Pattern for a :ref:`Notation <simple resource types>`.
+    :>json URL resources.view.office: Pattern for an :ref:`Office <simple resource types>`.
+    :>json URL resources.view.portfolio: Pattern for a :ref:`Portfolio Category <simple resource types>`.
+    :>json URL resources.view.provenance: Pattern for a :ref:`Provenance <simple resource types>`.
+    :>json URL resources.view.siglum: Pattern for a :ref:`RISM Siglum <simple resource types>`.
+    :>json URL resources.view.segment: Pattern for a :ref:`Database Segment <simple resource types>`.
+    :>json URL resources.view.status: Pattern for a :ref:`Source Status <simple resource types>`.
+    :>json object resources.browse: URLs to search among resources of a single type.
+    :>json URL resources.search.all: :http:get:`/(search.all)/`
+    :>json URL resources.search.chant: :http:get:`/(search.chant)/`
+    :>json URL resources.search.source: :http:get:`/(search.source)/`
+    :>json URL resources.search.indexer: :http:get:`/(search.indexer)/`
+    :>json URL resources.search.feast: :http:get:`/(search.feast)/`
+    :>json URL resources.search.genre: :http:get:`/(search.genre)/`
+    :>json URL resources.search.century: :http:get:`/(search.century)/`
+    :>json URL resources.search.notation: :http:get:`/(search.notation)/`
+    :>json URL resources.search.office: :http:get:`/(search.office)/`
+    :>json URL resources.search.provenance: :http:get:`/(search.provenance)/`
+    :>json URL resources.search.siglum: :http:get:`/(search.siglum)/`
+
+Find Server Version
+^^^^^^^^^^^^^^^^^^^
+
+The fastest and safest way to ensure a user agent and server use compliant versions of the Cantus
+API is to use a :http:method:`HEAD` request on the root URL.
+
+.. http:head:: /
+    :synopsis: Find the API version supported on the server.
+
+    :resheader X-Cantus-Version: Indicates the Cantus API version implemented by a client or server.
+        Values are described in :ref:`version numbers`.
+    :resheader Server: Indicates the implementation and its version. This SHOULD NOT be used by the
+        user agent to modify behaviour, but it may be of interest for debugging or other purposes.
+        The reference implementation is called "Abbott."
+
+
 Development Plan
 ^^^^^^^^^^^^^^^^
 
