@@ -238,46 +238,57 @@ Resource-Specific Information
 -----------------------------
 
 .. http:get:: /(search.all)/
+    :synopsis: Find resources of any type.
 
     Find resources of any type that match the given criteria.
 
 .. http:get:: /(search.indexer)/
+    :synopsis: Find Indexer resources.
 
     Find :ref:`indexer resource type` resources that match the given criteria.
 
 .. http:get:: /(search.chant)/
+    :synopsis: Find Chant resources.
 
     Find :ref:`chant resource type` resources that match the given criteria.
 
 .. http:get:: /(search.source)/
+    :synopsis: Find Source resources.
 
     Find :ref:`source resource type` resources that match the given criteria.
 
 .. http:get:: /(search.century)/
+    :synopsis: Find Century resources.
 
     Find Century resources that match the given criteria.
 
 .. http:get:: /(search.feast)/
+    :synopsis: Find Feast resources.
 
     Find :ref:`feast resource type` resources that match the given criteria.
 
 .. http:get:: /(search.genre)/
+    :synopsis: Find Genre resources.
 
     Find :ref:`genre resource type` resources that match the given criteria.
 
 .. http:get:: /(search.notation)/
+    :synopsis: Find Notation Style resources.
 
     Find Notation resources that match the given criteria.
 
 .. http:get:: /(search.office)/
+    :synopsis: Find Office resources.
 
     Find Office resources that match the given criteria.
 
 .. http:get:: /(search.provenance)/
+    :synopsis: Find Provenance resources.
 
     Find Provenance resources that match the given criteria.
 
 .. http:get:: /(search.siglum)/
+    :synopsis: Find RISM Siglum resources.
 
     Find Siglum resources that match the given criteria.
 
@@ -287,6 +298,7 @@ Unsearchable Resource Types
 I decided it did not make sense to search for these---users will always want to search something
 else too.
 
+* Cantusid
 * Portfolio
 * Segment
 * Source Status
