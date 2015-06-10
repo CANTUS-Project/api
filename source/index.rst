@@ -28,6 +28,8 @@ The API's basic design works thusly:
 - when present, request and response bodies are normally in JSON, although the default will later
   change to XML.
 
+.. _`url explanation`:
+
 A Note about URLs
 ^^^^^^^^^^^^^^^^^
 

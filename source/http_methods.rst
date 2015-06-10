@@ -12,34 +12,48 @@ HTTP Methods
 OPTIONS
 -------
 
-This will always provide generic information, so it will be the same for all resources of the same
-type. Maybe this will change in the future.
+The `OPTIONS <https://tools.ietf.org/html/rfc7231#section-4.3.7>`_ method returns information about
+which HTTP methods and Cantus extension headers are available for a specified request-target (URL).
+Although it is not a requirement of the HTTP standard, the reality of Cantus servers is that all
+resources of a given type and "action" (refer to :ref:`url explanation`) will produce the same
+response to an OPTIONS request. Differences between different resource types with the same "action"
+will be minimal.
 
-TODO: write this section
+The HTTP methods allowed for a resource are indicated in the :ref:`cantus header allow` header, as
+required in RFC 7231.
+
+The Cantus headers (defined in :ref:`cantus headers`) applicable to a resource MUST be returned in
+the response to an OPTIONS request, either used for their intended purpose (like
+:http:header:`X-Cantus-Version`) or with the value ``allow`` (case insensitive).
 
 .. _`get http method`:
 
 GET
 ---
 
-This gets the data for a resource, formatted as specified by Cantus-specific header fields, if
-present. Until the SEARCH method is implemented, search queries will be conducted with GET requests
-to search URLs.
+The `GET <https://tools.ietf.org/html/rfc7231#section-4.3.1>`_ method returns one or more resources
+in the response body, depending on the URL, request headers, and request body. The meaning of the
+request body is different depending on the "action" implied by the URL: for view and browse URLs,
+the request body is ignored; for search URLs, the request body contains the search query.
 
-TODO: write this section
+Many people and Web frameworks appear to believe that GET requests may not have a request body, but
+RFC 7231 clearly specifies that request bodies are permitted but do not have a defined meaning.
+With the previous paragraph, their meaning becomes defined for Cantus servers and user agents.
 
 .. _`head http method`:
 
 HEAD
 ----
 
-This is effectively like a resource-specific OPTIONS request, in that it will only return fields and
-values for which there are valid values for that particular resource. The disadvantage is that it
-may require additional information&mdash;as much as a GET request. For now, I think the main
-advantage of a HEAD request is that we could preview certain things about a search query without
-having to download and inspect the whole thing.
+In theory, the `HEAD <https://tools.ietf.org/html/rfc7231#section-4.3.2>`_ method is a GET request
+that returns only response headers without a response body. In effect, user agents can use a HEAD
+request like a resource-specific or search-query-specific OPTIONS request, in that the response
+headers contain information about the fields and resources that would be returned in the response
+body (being the resources themselves).
 
-TODO: write this section
+The API author guesses there will be two primary purposes for HEAD requests. First, to determine
+whether a resource has changed (by using the :http:header:`Etag` header, for instance). Second, to
+determine the characteristics of a search result without downloading and inspecting all results.
 
 .. _`search http method`:
 

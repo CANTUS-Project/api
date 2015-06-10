@@ -46,6 +46,8 @@ should always use data compression whenever possible, so the recommended value f
 
 TODO: find out if that's possible without too much complication
 
+.. _`cantus header allow`:
+
 Allow
 ^^^^^
 
@@ -107,8 +109,10 @@ These headers extend the HTTP standard in ways specific to the Cantus API. We cr
 headers only when no existing solution is sensible.
 
 The server SHOULD return a `400 Bad Request <https://tools.ietf.org/html/rfc7231#section-6.5.1>`_
-response code for any Cantus-specific request headers that contain invalid values, rather than
-ignoring the invalid value and continuing.
+response code for any Cantus-specific request headers that contain invalid values. However, for a
+request header that does not apply to the requested resource (like :http:header:`X-Cantus-Page` for
+a "view" URL that will only return a single resource) the server MUST ignore the extraneous headers
+regardless of whether their value is valid.
 
 X-Cantus-Version
 ^^^^^^^^^^^^^^^^
