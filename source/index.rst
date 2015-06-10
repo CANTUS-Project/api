@@ -28,6 +28,28 @@ The API's basic design works thusly:
 - when present, request and response bodies are normally in JSON, although the default will later
   change to XML.
 
+Why an Cantus API?
+^^^^^^^^^^^^^^^^^^
+
+This section answers several related questions about why we would bother to specify and write out an
+API for Cantus. The quick answer is that we wanted to allow long-term interoperability and stability
+across Cantus-related software.
+
+Intentionally writing an API encourages wise design, rather than a haphazard compilation of
+functionality. Having a known specification allows developers, both within Cantus and those working
+for third parties, to easily know how to use the Cantus database server. Preparing an implementation-
+independent API allows us to change any part of the server's implementation without affecting user
+agents and third-party software. Offering an HTTP API allows writing new user interfaces, whether
+for Web browsers or mobile devices, by only writing new user interface code (whereas replacing a
+Drupal-generated user interface requires replacing Drupal's database management code).
+
+The API was developed as part of an effort to replace an existing, Drupal-based database. The
+developers wanted to allow easier interoperability with the "Cantus Ultimus" project produced by a
+third party, and to develop two user interfaces (one for Web browsers, one for tablet computers),
+all using the same server software.
+
+There are undoubtedly additional benefits, and some disadvantages.
+
 .. _`url explanation`:
 
 A Note about URLs
