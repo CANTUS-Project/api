@@ -52,7 +52,7 @@ headers contain information about the fields and resources that would be returne
 body (being the resources themselves).
 
 The API author guesses there will be two primary purposes for HEAD requests. First, to determine
-whether a resource has changed (by using the :http:header:`Etag` header, for instance). Second, to
+whether a resource has changed (by using the :http:header:`ETag` header, for instance). Second, to
 determine the characteristics of a search result without downloading and inspecting all results.
 
 .. _`search http method`:

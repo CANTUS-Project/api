@@ -150,7 +150,7 @@ X-Cantus-No-Xref
 ^^^^^^^^^^^^^^^^
 
 Boolean header to instruct the server not to do cross-reference lookup in complex resources. Cross-
-referenced fields are what define complex resources (`complex resource types`_) and they may be
+referenced fields are what define complex resources (:ref:`complex resource types`) and they may be
 stored in the server's database in various ways. Filling all the cross-referenced fields may take
 significant additional time, and may not be desirable in all use cases.
 
