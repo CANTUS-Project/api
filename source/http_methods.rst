@@ -22,8 +22,8 @@ will be minimal.
 The HTTP methods allowed for a resource are indicated in the :ref:`cantus header allow` header, as
 required in RFC 7231.
 
-The Cantus headers (defined in :ref:`cantus headers`) applicable to a resource MUST be returned in
-the response to an OPTIONS request, either used for their intended purpose (like
+The Cantus request headers (defined in :ref:`cantus headers`) applicable to a resource MUST be
+returned in the response to an OPTIONS request, either used for their intended purpose (like
 :http:header:`X-Cantus-Version`) or with the value ``allow`` (case insensitive).
 
 .. _`get http method`:
