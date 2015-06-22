@@ -139,6 +139,11 @@ header.
 
 Both headers are a comma-separated list, like ``id, name, description``.
 
+Note that the "id" and "type" fields MUST be returned for every resource, since this is the minimum
+information required to find the resource again. If the :http:header:`X-Cantus-Extra-Fields` request
+header does not contain the "id" and "type" fields, the server SHOULD include them anyway, and
+SHOULD NOT consider this an invalid value.
+
 Refer also to the :ref:`cantus header example`.
 
 X-Cantus-Extra-Fields
