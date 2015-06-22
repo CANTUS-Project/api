@@ -134,7 +134,8 @@ X-Cantus-Fields
 Clients MAY use this header to request only certain fields in the response. Servers MUST include
 this header, which lists the fields that are present in *all* returned resources. Fields that are
 only present in some of the returned resources belong in the :http:header:`X-Cantus-Extra-Fields`
-header. For both headers, if no field applies, the SHALL omit the header entirely.
+header. For both headers, if there are no fields, the server MAY omit the header or return an empty
+header.
 
 Both headers are a comma-separated list, like ``id, name, description``.
 
