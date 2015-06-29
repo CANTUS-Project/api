@@ -6,6 +6,8 @@
 API for HTTP Access to the Cantus Database
 ==========================================
 
+Check it out, it's the HTTP method :http:method:`GET` and :http:method:`SEARCH`.
+
 This is the Application Programming Interface for Cantus database-access projects. The 1.x versions
 will only allow searching and reading the database, though (pending funding) 2.x versions will add
 the ability to create and edit resources.
@@ -19,17 +21,16 @@ Description
 The API's basic design works thusly:
 
 - a resource's URL "pathname" identifies a resource uniquely
-- the HTTP method indicates the type action to perform; you may wish to :ref:`GET http method` a
-  resource or receive a list of the available :ref:`OPTIONS http method` for a resource. The
-  exception, which is only temporary, is that searching uses special GET requests described in
-  :ref:`searching`.
+- the HTTP method indicates the action to perform; you may wish to :ref:`GET http method` a
+  resource, receive a list of the available :ref:`OPTIONS http method` for a resource, or
+  :ref:`SEARCH http method` for resources that meet certain criteria.
 - the HTTP headers indicate a desired data format (in requests) and actual format plus metadata (in
   responses).
-- when present, request and response bodies are normally in JSON, although the default will later
+- when present, request and response bodies are normally in JSON, although the default may later
   change to XML.
 
-Why an Cantus API?
-^^^^^^^^^^^^^^^^^^
+Why an API for Cantus?
+^^^^^^^^^^^^^^^^^^^^^^
 
 This section answers several related questions about why we would bother to specify and write out an
 API for Cantus. The quick answer is that we wanted to allow long-term interoperability and stability
@@ -55,22 +56,22 @@ There are undoubtedly additional benefits, and some disadvantages.
 A Note about URLs
 ^^^^^^^^^^^^^^^^^
 
-Throughout this document, URLs are usually indicated in a generic format, to emphasize their
-lack of importance in the API's operation. For this reason, domain names are usually omitted so
-that URLs begin with ``/``. In addition, most URLs contain parenthesized parts, as in
-``/(browse.chant)/``, to indicate that server implmentations may change actual URLs arbitrarily,
-so clients must determine all URLs dynamically at runtime by consulting the ``"resources"`` member
-of response bodies.
+Throughout this document, URLs are usually indicated in a generic format, to emphasize the
+unimportance of the specific URL. For this reason, domain names are usually omitted so that URLs
+begin with ``/``. In addition, most URLs contain parenthesized parts, as in ``/(browse.chant)/``,
+to indicate that server implmentations may change actual URLs arbitrarily, so clients must
+determine all URLs dynamically at runtime by consulting the ``"resources"`` member of response
+bodies.
 
 For this reason, servers MUST provide clients with relevant URLs in known locations as indicated
 throughout the API. In general, there are three *actions* to expect for every resource *type*:
 
     - browse: to access a sortable, paginated list of all resources of a given type.
     - view: to access a specific
-    - search: blah
+    - search: to browse filter resources by certain criteria
 
 Requests to the root URL (i.e., ``/`` as in ``https://abbott.cantusproject.org/``) will enumerate
-the URLs for all three actions for every resource type in the following way:
+the URLs in the following way:
 
 .. sourcecode:: http
 
@@ -88,10 +89,6 @@ the URLs for all three actions for every resource type in the following way:
                 "view": {
                     "chant": "/view/chant/id?",
                     "feast": "/view/id?/feast/"
-                    },
-                "search": {
-                    "chant": "/search_chants",
-                    "feast": "/f/se"
                     }
             }
     }
@@ -109,6 +106,8 @@ There are a few other points to note:
     - In the ``"resources"`` member, resource types are always in the singular form.
     - "View" URLs will contain the string ``id?``, which should be replaced with the "id" of the
       resource the user agent wishes to access.
+    - Search queries use the "browse" URL with the :ref:`SEARCH http method` method; browse queries
+      use the :ref:`GET http method` method.
 
 .. _`root url json specification`:
 
@@ -124,7 +123,9 @@ Root URL JSON Specification
     modification.
 
     :>json object resources: URLs and URL patterns to database resources.
-    :>json object resources.browse: URL to retrieve all resources of a type.
+    :>json object resources.browse: URLs to retrieve all resources of a type (with a GET request) or
+                                    only resources that match some criteria (with a SEARCH request).
+    :>json URL resources.browse.all: URL to browse/search resources of every type.
     :>json URL resources.browse.chant: URL for Chants.
     :>json URL resources.browse.source: URL for Sources.
     :>json URL resources.browse.cantusid: URL for Cantusids.
@@ -154,24 +155,12 @@ Root URL JSON Specification
     :>json URL resources.view.siglum: Pattern for a :ref:`RISM Siglum <simple resource types>`.
     :>json URL resources.view.segment: Pattern for a :ref:`Database Segment <simple resource types>`.
     :>json URL resources.view.status: Pattern for a :ref:`Source Status <simple resource types>`.
-    :>json object resources.browse: URLs to search among resources of a single type.
-    :>json URL resources.search.all: :http:get:`/(search.all)/`
-    :>json URL resources.search.chant: :http:get:`/(search.chant)/`
-    :>json URL resources.search.source: :http:get:`/(search.source)/`
-    :>json URL resources.search.indexer: :http:get:`/(search.indexer)/`
-    :>json URL resources.search.feast: :http:get:`/(search.feast)/`
-    :>json URL resources.search.genre: :http:get:`/(search.genre)/`
-    :>json URL resources.search.century: :http:get:`/(search.century)/`
-    :>json URL resources.search.notation: :http:get:`/(search.notation)/`
-    :>json URL resources.search.office: :http:get:`/(search.office)/`
-    :>json URL resources.search.provenance: :http:get:`/(search.provenance)/`
-    :>json URL resources.search.siglum: :http:get:`/(search.siglum)/`
 
 Find Server Version
 ^^^^^^^^^^^^^^^^^^^
 
 The fastest and safest way to ensure a user agent and server use compliant versions of the Cantus
-API is to use a :http:method:`HEAD` request on the root URL.
+API is to use a :ref:`HEAD http method` or :ref:`OPTIONS http method` request on the root URL.
 
 .. http:head:: /
     :synopsis: Find the API version supported on the server.

@@ -22,38 +22,33 @@ list.
 Accept
 ^^^^^^
 
-`RFC 7231 S. 5.3.2 <http://tools.ietf.org/html/rfc7231#section-5.3.2>`_. At this point, Cantus
-servers are only required to serve resources in JSON format. Refer to the `Content-Type`_ section
-for more information.
+Although Cantus servers are only required to supply response bodies in ``application/json`` format,
+for completeness all Cantus user agents MUST provide a :http:header:`Accept` header with that value.
 
-While, in accordance with RFC 7231, user agents are not required to include a :http:header:`Accept`
-header, the API may provide additional response formats in the future (in particular
-``application/xml`` and ``text/xml``) and may even change the default format, so user agents are
-strongly recommend to specify :http:header:`Accept` to ensure forward compatibility.
+While, in accordance with RFC 7231, user agents are not required to include this header, the API
+may provide additional response formats in the future (in particular ``application/xml`` and
+``text/xml``) and may even change the default format, so user agents are strongly recommend to
+specify :http:header:`Accept` to ensure forward compatibility.
 
 Accept-Charset
 ^^^^^^^^^^^^^^
 
-`RFC 7231 S. 5.3.3 <http://tools.ietf.org/html/rfc7231#section-5.3.3>`_. Cantus clients should
-always use Unicode and UTF-8 whenever possible, so the recommended value for this header is ``utf-8``.
+Cantus user agents MUST use UTF-8; for completeness this must be indicated in the
+:http:header:`Accept-Charset` header as ``utf-8``.
 
 Accept-Encoding
 ^^^^^^^^^^^^^^^
 
-`RFC 7231 S. 5.3.4 <http://tools.ietf.org/html/rfc7231#section-5.3.4>`_. Cantus clients and servers
-should always use data compression whenever possible, so the recommended value for this header is
-``gzip``.
-
-TODO: find out if that's possible without too much complication
+Cantus user agents and servers MAY use data compression whenever possible, so the recommended value
+for the :http:header:`Accept-Encoding` header is ``gzip``.
 
 .. _`cantus header allow`:
 
 Allow
 ^^^^^
 
-`RFC 7231 S. 7.4.1 <http://tools.ietf.org/html/rfc7231#section-7.4.1>`_. When a client invokes the
-``OPTIONS`` method on a resource, the "Allow" header in the response will indicate which other
-methods may be invoked on that resource.
+When a client invokes the :http:method:`OPTIONS` method on a resource, the :http:header:`Allow`
+header in the response indicates which other methods may be invoked on that resource.
 
 Example:
 
@@ -70,28 +65,25 @@ Example:
 Content-Encoding
 ^^^^^^^^^^^^^^^^
 
-`RFC 7231 S. 3.1.2.2 <http://tools.ietf.org/html/rfc7231#section-3.1.2.2>`_. Tells the client
-the encoding of the response (i.e., whether its requested data compression algorithm was available
-and used).
+The :http:header:`Content-Encoding` header tells a user agent the encoding of the response (i.e.,
+whether its requested data compression algorithm was available and used).
 
 Content-Length
 ^^^^^^^^^^^^^^
 
-`RFC 7230 S. 3.3.2 <http://tools.ietf.org/html/rfc7230#section-3.3.2>`_. A decimal number indicating
-the number of octets expected in the response body. This is used by clients (probably automatically
-by an HTTP library) to determine when all data has been received.
+The :http:header:`Content-Length` is a decimal number indicating the number of octets expected in
+the response body. This is used by clients (probably automatically by an HTTP library) to determine
+when all data has been received.
 
 .. Implmementation note: Tornado handles this automatically.
 
 Content-Type
 ^^^^^^^^^^^^
 
-`RFC 7231 S. 3.1.1.5 <http://tools.ietf.org/html/rfc7231#section-3.1.1.5>`_. Cantus servers provide
-the Content-Type header with every response, including the "charset" parameter. While "charset" will
-almost invariably be ``utf-8``, it may be possible to provide other character sets in the future.
-
-The media-type will be ``application/json``, indicating a message body encoded in JSON, as specified
-in `RFC 7158 <http://tools.ietf.org/html/rfc7158>`_.
+Cantus server MUST provide a :http:header:`Content-Type` header with every response, including the
+"charset" parameter. Response bodies are formatted in `JSON <http://tools.ietf.org/html/rfc7158>`_,
+with the UTF-8 character set, so the value of this header will almost invariably be
+``application/json; charset=utf-8``.
 
 Future versions of the API may permit or require different response formats, in particular
 ``application/xml`` and ``text/xml``, and may also change the default response format. Therefore,
@@ -194,8 +186,9 @@ Example response body with :http:header:`X-Cantus-No-Xref` set to ``true``.
 X-Cantus-Total-Results
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The total number of results that match a search query. The server MUST include this header with the
-results of every search query.
+The total number of results that match a search query. The server MUST include this header in the
+response to every :ref:`search http method` request, and MAY also provide it in the
+response to a "browse" or "view" request.
 
 X-Cantus-Per-Page
 ^^^^^^^^^^^^^^^^^
@@ -258,7 +251,7 @@ X-Cantus-Search-Help
 ^^^^^^^^^^^^^^^^^^^^
 
 If the client indicates ``true`` in the :http:header:`X-Cantus-Search-Help` header, the server MAY
-modify a search request to be more lenient if the original search request produced no results. In
+modify a search request to be more lenient if the original search request produces no results. In
 this case, the server MUST return the actual query in the :http:header:`X-Cantus-Search-Help`
 response header.
 

@@ -3,8 +3,8 @@
 How to Search
 =============
 
-Every resource type that may be searched will provide a "search" URL in the "resources" response to
-the server's root URL. For example, you may submit a request to the root URL:
+Resources are searchable with a specially-formatted :http:method:`SEARCH` request to their "browse"
+URL. For example, you may submit a request to the root URL:
 
 .. sourcecode:: http
 
@@ -22,44 +22,17 @@ And receive a response like this:
             "browse": {
                 "genre": "/genres/",
                 },
-            "search": {
-                "genre": "/genres/search",
-                },
             "view": {
                 "genre": "/genre-view/id?"
                 },
         }
     }
 
-Thus in this case clients should use the ``/genres/search/`` URL to search for a genre. Search
-requests are submitted as a ``GET`` request to the indicated URL, with a specially-formatted request
-body and optional headers. (Refer to :ref:`cantus headers` for more information about headers
-relevant to searching).
+Thus in this case clients should use the ``/genres/`` URL to search for a genre. Most of the rest
+of this section describes how to format the :http:method:`SEARCH` request to obtain desired results.
 
-Searching Across Resource Types
--------------------------------
-
-The Cantus API allows one additional type of search: where the desired resource type is unknwon. The
-URL to use for these searches will be provided by the ``["search"]["all"]`` member, like this:
-
-.. sourcecode:: http
-
-    HTTP/1.1 200 OK
-
-    ...
-    {
-        "resources": {
-            "browse": {
-                ...
-                },
-            "search": {
-                "all": "/search",
-                },
-            "view": {
-                ...
-                },
-        }
-    }
+The Cantus API also allows searching for resources of unknown type. For this use the
+:http:search:`/(browse.all)/` URL.
 
 Search Request
 --------------
@@ -79,7 +52,7 @@ TODO: write other things here
 
 The "cantus" query grammar is inspired by Solr's "standard query parser," but differs notably.
 Unlike with Solr, query parameters are part of the request body rather than the URL---as
-required by the HTTP ``SEARCH`` method, which the API may use in a future version. Also, query
+required by the HTTP :http:method:`SEARCH` method. Also, query
 parameters are modified and added by the server implementation before being sent to Solr, in order
 to fetch the expected results. Therefore, even if a server implementation does use Solr, which is
 not required by this API, clients should not expect their query will be submitted to the Solr
@@ -94,7 +67,7 @@ type---also have a variant suffixed with "_id"to allow more accurate :ref:`id-ba
 those resources, ID-based filtering is preferred; otherwise a :ref:`name-based filter` will
 happen.
 
-For example, a query at the ``/(search.source)/`` URL may use the following content-based fields:
+For example, a query at the ``/(browse.source)/`` URL may use the following content-based fields:
 id, title, siglum, provenance_detail, date, source_status_desc, summary, liturgical_occasions,
 description, indexing_notes, and indexing_date. In addition, the following fields correspond to
 another resource, so they may be used in ID-based filtering with an "_id" suffix, or in a name-based
@@ -102,7 +75,7 @@ sub-query: rism, provenance, century, notation_style, editors, indexers, proofre
 and source_status.
 
 In all cases, any unknown, invalid, or inapplicable data are ignored. If all data are ignored, an
-empty result body will be provided. For example, a search to the ``/(search.source)/`` URL for
+empty result body will be provided. For example, a search to the ``/(browse.source)/`` URL for
 ``{'query': '+city:Waterloo'}`` will always return no results because Source resources do not have
 a "city" field.
 
@@ -178,7 +151,7 @@ antiphons that mention "jesus" in the incipit, you might submit this query:
 
 .. sourcecode:: http
 
-    GET /(search.chant)/ HTTP/1.1
+    SEARCH /(browse.chant)/ HTTP/1.1
 
     {
         "incipit": "jesus",
@@ -193,21 +166,21 @@ submitting the following three queries:
 
 .. sourcecode:: http
 
-    GET /(search.feast)/ HTTP/1.1
+    SEARCH /(browse.feast)/ HTTP/1.1
 
     {"name": "pascha"}
     <!-- returns one feast with an id of "08020100" -->
 
 .. sourcecode:: http
 
-    GET /(search.genre)/ HTTP/1.1
+    SEARCH /(browse.genre)/ HTTP/1.1
 
     {"name": "antiphon"}
     <!-- returns one genre with an id of "422" -->
 
 .. sourcecode:: http
 
-    GET /(search.chant)/ HTTP/1.1
+    SEARCH /(browse.chant)/ HTTP/1.1
 
     {
         "incipit": "jesus",
@@ -237,57 +210,59 @@ TODO: write this part
 Resource-Specific Information
 -----------------------------
 
-.. http:get:: /(search.all)/
+TODO: delete this part after you decide you don't need it at all
+
+.. http:search:: /(browse.all)/
     :synopsis: Find resources of any type.
 
     Find resources of any type that match the given criteria.
 
-.. http:get:: /(search.indexer)/
+.. http:search:: /(browse.indexer)/
     :synopsis: Find Indexer resources.
 
     Find :ref:`indexer resource type` resources that match the given criteria.
 
-.. http:get:: /(search.chant)/
+.. http:search:: /(browse.chant)/
     :synopsis: Find Chant resources.
 
     Find :ref:`chant resource type` resources that match the given criteria.
 
-.. http:get:: /(search.source)/
+.. http:search:: /(browse.source)/
     :synopsis: Find Source resources.
 
     Find :ref:`source resource type` resources that match the given criteria.
 
-.. http:get:: /(search.century)/
+.. http:search:: /(browse.century)/
     :synopsis: Find Century resources.
 
     Find Century resources that match the given criteria.
 
-.. http:get:: /(search.feast)/
+.. http:search:: /(browse.feast)/
     :synopsis: Find Feast resources.
 
     Find :ref:`feast resource type` resources that match the given criteria.
 
-.. http:get:: /(search.genre)/
+.. http:search:: /(browse.genre)/
     :synopsis: Find Genre resources.
 
     Find :ref:`genre resource type` resources that match the given criteria.
 
-.. http:get:: /(search.notation)/
+.. http:search:: /(browse.notation)/
     :synopsis: Find Notation Style resources.
 
     Find Notation resources that match the given criteria.
 
-.. http:get:: /(search.office)/
+.. http:search:: /(browse.office)/
     :synopsis: Find Office resources.
 
     Find Office resources that match the given criteria.
 
-.. http:get:: /(search.provenance)/
+.. http:search:: /(browse.provenance)/
     :synopsis: Find Provenance resources.
 
     Find Provenance resources that match the given criteria.
 
-.. http:get:: /(search.siglum)/
+.. http:search:: /(browse.siglum)/
     :synopsis: Find RISM Siglum resources.
 
     Find Siglum resources that match the given criteria.
