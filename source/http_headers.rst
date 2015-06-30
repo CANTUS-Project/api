@@ -92,6 +92,174 @@ compatibility.
 
 .. Implementation note: Tornado handles the "Content-Type" header automatically.
 
+Cross-Origin Resource Sharing (CORS) Headers
+--------------------------------------------
+
+The following headers are used for `Cross-Origin Resource Sharing <http://www.w3.org/TR/cors/>`_
+requests. In practice for Cantus, server-to-server requests will not be CORS requests, but requests
+sent with a Web browser as the user agent are likely to be CORS requests. In everyday use, most
+browser-sent requests are not CORS requests. Because we expect the Cantus server and user-facing
+Web app to be served on different hosts (or at least on different ports) it is likely that a
+user-facing Web app will be submitting CORS requests.
+
+The user agent's implementation will be handled automatically by the user agent (being the browser).
+Thus CORS is primarily a concern for the server implementation. Do note that, while Cantus server
+implementations MAY support the following CORS headers, it is not strictly necessary to have a
+useful server implementation.
+
+When implementing CORS support, we strongly recommend server authors to follow the specification's
+`Resource Processing Model <http://www.w3.org/TR/cors/#resource-processing-model>`_, which is both
+quite precise and relatively easy to understand and follow.
+
+In the context of this section, a **pre-flight request** is an OPTIONS request submitted before the
+actual request, with the intent of determining whether the actual reqeust will succeed according to
+the provided CORS header values.
+
+Note there is an :ref:`example <CORS header example>` at the end of this section.
+
+Access-Control-Allow-Origin
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The :http:header:`Access-Control-Allow-Origin` response header contains a single hostname, the value
+of the :ref:`CORS origin header` request header, *if* that host is permitted to use the Cantus server.
+
+This header is required in both the pre-flight and actual request.
+
+Access-Control-Expose-Headers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The :http:header:`Access-Control-Expose-Headers` response header holds a list of the header names
+that Cantus user agents will want to read. In practice, these are the Cantus-specific extension
+headers. This will be used in both the
+
+This header is required in both the pre-flight and actual request.
+
+Access-Control-Max-Age
+^^^^^^^^^^^^^^^^^^^^^^
+
+To reduce server traffic, the Cantus server MAY include the :http:header:`Access-Control-Max-Age`
+header in the response to a pre-flight request indicating the number of seconds for which the CORS
+headers will be valid.
+
+This header may only appear in the pre-flight request.
+
+Access-Control-Allow-Methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The :http:header:`Access-Control-Allow-Methods` response header is a response to the
+:ref:`CORS request method` request header. This response header will contain the value of the request
+header if it is permitted for this resource and it is not a `simple method <http://www.w3.org/TR/cors/#simple-method>`_
+(i.e., GET, HEAD, or POST).
+
+This header may only appear in the pre-flight request.
+
+Access-Control-Allow-Headers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The :http:header:`Access-Control-Allow-Headers` response header is a response to the
+:ref:`CORS request headers` request header. The response header will hold all the values of the
+request header that are allowed as header names for a CORS request.
+
+This header may only appear in the pre-flight request.
+
+.. _`CORS request method`:
+
+Access-Control-Request-Method
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The user agent submits the :http:header:`Access-Control-Request-Method` header with the HTTP method
+that will be used in the actual request.
+
+This header may only appear in the pre-flight request.
+
+.. _`CORS request headers`:
+
+Access-Control-Request-Headers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The user agent submited the :http:header:`Access-Control-Request-Headers` header with the header
+names that will be used in the actual request.
+
+This header may only appear in the pre-flight request.
+
+.. _`CORS origin header`:
+
+Origin
+^^^^^^
+
+The user agent submited the :http:header:`Origin` header with the hostname (and access scheme and,
+if it is not 80, the port) from which the user agent's Web page came. If this header is part of a
+request, the server SHOULD add a ``Vary: Origin`` header, since a CORS request may receive a
+different response than an otherwise-identical non-CORS request. Also note that, if the
+:http:header:`Origin` header is not present in a request, any other CORS request headers MUST be
+ignored.
+
+This header is required in both the pre-flight request and the actual request.
+
+.. note:: We recommend that server implementations check the value of the ``Origin`` header against
+    a list of known Web app deployments, to prevent requests coming from unknown Web apps.
+
+.. _`CORS headers example`:
+
+Example
+^^^^^^^
+
+In this example, we assume that Abbott (the Cantus API server) is operating at ``https://abbott.cantusproject.org:8888/``
+and that a user enters ``https://app.cantusproject.org/`` in their browser to access the GUI Web app.
+From the perspective of the Cantus GUI Web app's author, one single request has been submitted---the
+"actual" request---meaning the browser automatically creates the preflight request.
+
+Preflight request:
+
+.. sourcecode:: http
+
+    OPTIONS https://abbott.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
+    Access-Control-Request-Method: SEARCH
+    Access-Control-Request-Headers: X-Cantus-Search-Help, X-Cantus-Page, X-Cantus-Garbage-Header
+    Origin: https://app.cantusproject.org/
+    ...
+
+Preflight response:
+
+.. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Allow: GET, HEAD, OPTIONS, SEARCH
+    Access-Control-Allow-Origin: https://app.cantusproject.org/
+    Access-Control-Allow-Headers: X-Cantus-Search-Help, X-Cantus-Page
+    Access-Control-Allow-Method: SEARCH
+    Access-Control-Max-Age: 86400
+    ...
+
+Actual request:
+
+.. sourcecode:: http
+
+    SEARCH https://abbott.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
+    X-Cantus-Search-Help: true
+    X-Cantus-Page: 4
+    Origin: https://app.cantusproject.org/
+    ...
+
+    {"query": "incipit:deus"}
+
+Actual response:
+
+.. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Access-Control-Allow-Origin: https://app.cantusproject.org/
+    Access-Control-Max-Age: 86400
+    Access-Control-Expose-Headers: X-Cantus-Search-Help, X-Cantus-Page, X-Cantus-Per-Page, { others }
+    X-Cantus-Search-Help: true
+    X-Cantus-Page: 4
+    X-Cantus-Per-Page: 10
+    ...
+
+    { /* chant data here */ }
+
+Note that only a subset of the headers are shown, to emphasize the CORS behaviour.
+
 .. _`cantus headers`:
 
 Cantus-Specific Extension Headers
