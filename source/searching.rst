@@ -37,13 +37,61 @@ The Cantus API also allows searching for resources of unknown type. For this use
 Search Request
 --------------
 
-Search parameters are carried in the request body. Some additional parameters, used to change the
-format of results, are carried in headers, as specified below in :ref:`search request headers`.
+The request body for a :http:method:`SEARCH` request must be a JSON string. One member is required,
+``"query"``, which holds the search query in a string. The :ref:`cantus headers` section describes
+which headers may be used to modify the formatting of search results. The following request headers
+may also be incorporated directly in the SEARCH request body, as indicated below:
 
-The format of a search request body depends on the search grammar. At present, the only supported
-grammar is :ref:`described below <cantus query grammar>`.
+    - X-Cantus-Include-Resources as ``"include-resources"``
+    - X-Cantus-Fields as ``"fields"``
+    - X-Cantus-No-Xref as ``"no-xref"``
+    - X-Cantus-Per-Page as ``"per-page"``
+    - X-Cantus-Page as ``"page"``
+    - X-Cantus-Sort as ``"sort"``
+    - X-Cantus-Search-Help as ``"search-help"``
 
-TODO: write other things here
+If a header and request body member hold conflicting values (e.g., ``X-Cantus-Search-Help: true`` in
+the headers but ``"search-help": false`` in the request body) the server MUST use the value from the
+request body, disregarding the value from the header, even if the request body's value is invalid
+and the header's value is valid. The same error response codes SHOULD be provided as for an error
+in the corresponding header.
+
+The grammar of the ``"query"`` string is described below in :ref:`<cantus query grammar>`.
+
+Example Search Query
+^^^^^^^^^^^^^^^^^^^^
+
+The following search request example yields all the chants on a folio of the same manuscript. You
+may "flip the pages" of the manuscript by changing the "folio" value in the ``"query"`` string.
+
+.. sourcecode:: http
+
+    SEARCH /(browse.chants)/ HTTP/1.1
+    X-Cantus-Per-Page: 50
+
+    {
+        "query": "+source_id:123614 +folio:042r",
+        "sort": "sequence,asc"
+    }
+
+The following query is also possible, replacing the ``source_id`` field with ``source``. The server
+will automatically search for the ``source_id`` on behalf of the user agent, but this is obviously
+more error-prone than using the ``source_id`` directly, if it is known to the user agent. Refer to
+the :ref:`lengthier discussion below <name-based filter>` for more information.
+
+.. sourcecode:: http
+
+    SEARCH /(browse.chants)/ HTTP/1.1
+    X-Cantus-Per-Page: 50
+
+    {
+        "query": '+source:"Klosterneuburg, Augustiner-Chorherrenstift - Bibliothek, 1010" +folio:042r',
+        "sort": "sequence,asc"
+    }
+
+Although it would be a nice touch, you cannot use the ``X-Cantus-Page`` header to "flip the pages"
+in the manuscript. Furthermore, if the ``X-Cantus-Per-Page`` header is not set manually to an
+arbitrarily high value, users may inadvertently miss some chants on some pages.
 
 .. _`cantus query grammar`:
 
@@ -194,13 +242,6 @@ and getting results sooner. The disadvantage is that the results may be much les
 example, returns results associated with the "Pascha Annotinum" feast, which is not Easter. Because
 it is virtually impossible for a client or server to predict whether users are running into this
 problem, ID-based filtering is preferred whenever a resource "id" is available.
-
-.. _`search request headers`:
-
-Use Headers to Change the Result Format
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-TODO: write this part
 
 Search Result
 -------------
