@@ -52,7 +52,7 @@ copyright = u'2015, Christopher Antila'
 # built documents.
 #
 # The short X.Y version.
-version = '0.1.6'
+version = '0.1.99'
 # The full version, including alpha/beta/rc tags.
 release = '{}'.format(version)
 
