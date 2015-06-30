@@ -138,9 +138,10 @@ JavaScript string.
 
 You may include search terms the following ways:
 
-- Term searches by using that word (e.g., ``'antiphon'``). Beware this does not match similar terms,
+- Term searches by using that word (e.g., ``antiphon``). Beware this does not match similar terms,
   or partial terms---"antiphoner" will not be included in the results of this search.
-- Phrase searches with ``"`` (e.g., ``'"of bingen"'`` will not match "bingen" unless preceded by "of").
+- Phrase searches with ``"`` (e.g., ``'"of bingen"'`` will not match "bingen" unless preceded by
+  "of"). Note that this requires double-quote marks; single-quote marks will not work.
 - Wildcard with ``?`` and ``*``, matching a single character and zero or more characters,
   respectively. You may want to use the ``*`` wildcard more often than not, since not using it may
   lead to fewer results than expected.
@@ -179,19 +180,36 @@ with "id" of ``14``, ``15``, and ``16``.
 
 .. _`id-based filter`:
 
-ID-based Filtering
-^^^^^^^^^^^^^^^^^^
+ID-based Query
+^^^^^^^^^^^^^^
 
-When you want to limit search results by a particular resource and you know its "id," use a ID-based
+When you want to limit search results by a particular resource and you know its "id," use an ID-based
 filter. This search strategy is more accurate than name-based sub-queries, so we prefer it whenever
 possible.
 
-TODO: finish this
+For example, if the "id" of the "Antiphon" genre is ``122``, the "id" of the "Ljubljana,
+Nadškofijski arhiv (Archiepiscopal Archives), 19 (olim 18)" source is ``123659``, and the "id" of
+the "Jacobi" feast is ``2378``, we can find all the Jacobi antiphons in that manuscript with the
+following query:
+
+.. sourcecode:: http
+
+    SEARCH /(browse.chants)/ HTTP/1.1
+
+    {"query": "genre_id:122 AND source_id:123659 AND feast_id:2378"}
+
+The equivalent name-based query follows:
+
+.. sourcecode:: http
+
+    SEARCH /(browse.chants)/ HTTP/1.1
+
+    {"query": 'genre:antiphon AND source:"Ljubljana, Nadškofijski arhiv (Archiepiscopal Archives), 19 (olim 18)" AND feast:Jacobi'}
 
 .. _`name-based filter`:
 
-Name-based Sub-query
-^^^^^^^^^^^^^^^^^^^^
+Name-based Query
+^^^^^^^^^^^^^^^^
 
 When you want to limit search results by a particular resource but you do not know the "id," you
 can use a name-based sub-query to avoid submitting two queries. For example, to search for Easter
@@ -242,71 +260,6 @@ and getting results sooner. The disadvantage is that the results may be much les
 example, returns results associated with the "Pascha Annotinum" feast, which is not Easter. Because
 it is virtually impossible for a client or server to predict whether users are running into this
 problem, ID-based filtering is preferred whenever a resource "id" is available.
-
-Search Result
--------------
-
-TODO: write this part
-
-Resource-Specific Information
------------------------------
-
-TODO: delete this part after you decide you don't need it at all
-
-.. http:search:: /(browse.all)/
-    :synopsis: Find resources of any type.
-
-    Find resources of any type that match the given criteria.
-
-.. http:search:: /(browse.indexer)/
-    :synopsis: Find Indexer resources.
-
-    Find :ref:`indexer resource type` resources that match the given criteria.
-
-.. http:search:: /(browse.chant)/
-    :synopsis: Find Chant resources.
-
-    Find :ref:`chant resource type` resources that match the given criteria.
-
-.. http:search:: /(browse.source)/
-    :synopsis: Find Source resources.
-
-    Find :ref:`source resource type` resources that match the given criteria.
-
-.. http:search:: /(browse.century)/
-    :synopsis: Find Century resources.
-
-    Find Century resources that match the given criteria.
-
-.. http:search:: /(browse.feast)/
-    :synopsis: Find Feast resources.
-
-    Find :ref:`feast resource type` resources that match the given criteria.
-
-.. http:search:: /(browse.genre)/
-    :synopsis: Find Genre resources.
-
-    Find :ref:`genre resource type` resources that match the given criteria.
-
-.. http:search:: /(browse.notation)/
-    :synopsis: Find Notation Style resources.
-
-    Find Notation resources that match the given criteria.
-
-.. http:search:: /(browse.office)/
-    :synopsis: Find Office resources.
-
-    Find Office resources that match the given criteria.
-
-.. http:search:: /(browse.provenance)/
-    :synopsis: Find Provenance resources.
-
-    Find Provenance resources that match the given criteria.
-
-.. http:search:: /(browse.siglum)/
-    :synopsis: Find RISM Siglum resources.
-
-    Find Siglum resources that match the given criteria.
 
 Unsearchable Resource Types
 ---------------------------

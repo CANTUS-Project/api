@@ -1,6 +1,3 @@
-..
-    TODO: write full examples, with full headers and response bodies, so people get the idea
-
 .. _`resource types`:
 
 Resource Types

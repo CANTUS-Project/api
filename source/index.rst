@@ -266,8 +266,6 @@ would have been redundant anyway. With the :http:header:`X-Cantus-Fields` header
 fields the database has for this chant---and more importantly that some of the fields are mising
 (like ``marginalia`` and ``volpiano``).
 
-TODO: write an example using headers to help with a search
-
 .. _`version numbers`:
 
 API Versions and Version Numbers
