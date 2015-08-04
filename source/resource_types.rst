@@ -47,7 +47,9 @@ You submit a query about "Benedicamus patrem et filium" chants:
 
 .. sourcecode:: http
 
-    GET https://abbott.uwaterloo.ca/chants/?="benedicamus_patrem_et_filium" HTTP/1.1
+    SEARCH https://abbott.uwaterloo.ca/chants/ HTTP/1.1
+
+    {"query": "'benedicamus patrem et filium'"}
 
 .. sourcecode:: http
 
