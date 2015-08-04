@@ -125,6 +125,7 @@ database---perhaps never.
     :>json string id: The "id" of this resource.
     :>json string name: Human-readable name for the resource.
     :>json string description: Brief explanation of the resource.
+    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 The following simple resource types use the default fields described above:
 
@@ -156,6 +157,7 @@ Indexer
     :>json string institution: The indexer's associated university or research institution.
     :>json string city: The city where the indexer lives.
     :>json string country: The country where the indexer lives.
+    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 .. _`feast resource type`:
 
@@ -171,6 +173,7 @@ Feast
     :>json string description: Brief explanation of the feast.
     :>json string date: Date on which the feast occurs.
     :>json string feast_code: Standardized feast code for the feast.
+    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 .. _`genre resource type`:
 
@@ -212,6 +215,7 @@ CantusID
     :>json string genre: ``"name"`` field of the corresponding "Genre" resource
     :>json string incipit: the chant's incipit with standardized spelling
     :>json string full_text: full text with standardized spelling
+    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 .. _`chant resource type`:
 
@@ -247,6 +251,7 @@ Chant
     :>json string siglum: the "siglum" field of the corresponding "Source" resource
     :>json string proofreader: ``"display_name"`` of an "Indexer" resource
     :>json string melody_id: (will appear in ``"resources"`` after the first version)
+    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
     :>json string resources>source: URL to the containing "Source" resource
     :>json string resources>office: URL to the corresponding "Office"
     :>json string resources>genre: *not provided* (ask the "CantusID" resource)
@@ -254,7 +259,6 @@ Chant
     :>json string resources>feast: URL to the corresponding "Feast" resource
     :>json string resources>image_link: URL to an image, or a Web page with an image, of this Chant
     :>json string resources>proofreader: URL to an "Indexer" resource
-    :>json string resources>drupal_path: URL to the Chant resource on the Drupal website
     :>json string resources>cantus_id: URL to the corresponding "CantusID" resource
 
 .. _`source resource type`:
@@ -287,6 +291,7 @@ Source
     :>json string description: Description
     :>json string indexing_notes: Indexing notes
     :>json string indexing_date: Indexing date
+    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
     :>json object resources: Links to other indexer who share the same characteristics.
     :>json string resources>provenance:
     :>json string resources>century:
@@ -296,4 +301,3 @@ Source
     :>json string resources>proofreaders: List of URLs to Indexer resources.
     :>json string resources>source_status:
     :>json string resources>image_link: Root URL linking to images for the entire source.
-    :>json string resources>drupal_path: URL to this Source on the "old" Drupal site.
