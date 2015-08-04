@@ -19,6 +19,9 @@ therefore hold otherwise-identical resources with different "id" values and sour
 server give access to the same collection of resources: some servers may choose to cache metadata
 of the entire Cantus network, while others may not, or may cache a different subset.
 
+A link in the ``"resources"`` section of a response body must always point to a server that is
+compatible with the Cantus API. Other links should be given in other fields.
+
 With Non-Cantus Servers
 -----------------------
 
