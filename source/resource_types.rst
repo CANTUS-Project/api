@@ -95,14 +95,14 @@ About the "id" Field
 
 For "view" URLs, where ``id?`` makes part of the server-provided URL, user agents MUST form a full
 URL by substituting a resource's unique "id" value in that part of the URL. The full three-character
-``id?`` string must be removed from the URL. Cantus API "id" values may consist of any alphanumeric
+string, ``id?``, must be removed from the URL. Cantus API "id" values may consist of any alphanumeric
 character valid in a URL, plus hyphens and underscores.
 
 The following points also apply:
 
-- A resource's "id" MUST remain the same through the resource's lifetime.
-- Changing attributes, properties, or data in a resource MUST NOT attempt to change the "id" field.
-- A resource's "id" field MAY be prefixed with an identifier indicating which database the holds the
+- A resource's "id" MUST NOT change through the resource's lifetime.
+- Changing attributes, properties, or data in a resource MUST NOT change the "id" field.
+- A resource's "id" field MAY be prefixed with an identifier indicating which database holds the
   resources's authoritative copy.
 - The same "id" MAY or may not refer to "the same" resource when served by a different deployment of
   a Cantus server application. That is, the Cantus API does not guarantee uniqueness of "id" values
@@ -185,21 +185,15 @@ Genre
     :>json string name: Human-readable name for the genre.
     :>json string description: Brief explanation of the genre.
     :>json string mass_or_office: A case-insensitive string, either ``"mass"`` or ``"office"``.
+    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 .. _`complex resource types`:
 
 Complex Resource Types
 ----------------------
 
-The following resource types (CantusID, Chant, Indexer, Source) hold many fields of information,
-some of which correspond to a "taxonomy" field given in the previous section.
-
-For the matrices in this section, "Field Name in MySQL" indicates the name of the field in the
-Cantus Drupal MySQL database; "Field Name in Drupal" indicates the name of the field as displayed
-in the Cantus Drupal user interface; "Field Name in JSON" is the member name of this data as
-delivered in the Cantus API; ``"resources"`` indicates whether a hyperlink to more information
-about that field's value *may* be included with a JSON response. Refer to the `Request and Response
-Bodies <response bodies>`_ section for more information on how to make this bit work right.
+The following resource types (CantusID, Chant, Indexer, Source) hold many data fields, some of which
+cross-reference a simple resource described in the previous section, or another complex resource.
 
 .. _`cantusid resource type`:
 
