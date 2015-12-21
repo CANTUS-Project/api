@@ -25,18 +25,19 @@ JavaScript. They always have the same form:
 
 .. sourcecode:: http
 
-    {"id_value":
-         {"id": "id_value",
-          "type": "example_resource",
-          "fieldA": "value",
-          "fieldB": "value"
-         },
-     "resources":
-         {"id_value":
-              {"fieldA": "value URL",
-               "fieldB": "value URL"
-              },
-         }
+    {
+        "id_value": {
+            "id": "id_value",
+            "type": "example_resource",
+            "fieldA": "value",
+            "fieldB": "value"
+        },
+        "resources": {
+            "id_value": {
+                "fieldA": "value URL",
+                "fieldB": "value URL"
+            },
+        }
     }
 
 Only fields with data will be included in a response, regardless of which fields are requested. In
@@ -45,21 +46,22 @@ addition, hyperlinks to corresponding resources are automatically included whene
 
 .. sourcecode:: http
 
-    {"361434":
-         {"id": "361434",
-          "type": "chant",
-          "incipit": "Dixit dominus paralytico",
-          "cantus_id": "002288",
-          "feast": "Dom. 21 p. Pent.",
-          "feast_desc": "21st Sunday after Pentecost"
-         },
-     "resources":
-         {"361434":
-              {"self": "/chants/361434cantus/",
-               "cantus_id": "/chants/cantus_id/002288/",
-               "feast": "/feasts/1616/"
-              }
-         }
+    {
+        "361434": {
+            "id": "361434",
+            "type": "chant",
+            "incipit": "Dixit dominus paralytico",
+            "cantus_id": "002288",
+            "feast": "Dom. 21 p. Pent.",
+            "feast_desc": "21st Sunday after Pentecost"
+        },
+        "resources": {
+            "361434": {
+                "self": "/chants/361434cantus/",
+                "cantus_id": "/chants/cantus_id/002288/",
+                "feast": "/feasts/1616/"
+            }
+        }
     }
 
 The response body tells us that this chant occurs during the feast called "Dom. 21 p. Pent." which
@@ -82,30 +84,32 @@ displayed. For example:
 
 .. sourcecode:: http
 
-    {"361434":
-         {"id": "361434",
-          "type": "chant",
-          "incipit": "Dixit dominus paralytico",
-          "cantus_id": "002288",
-          "feast": "Dom. 21 p. Pent.",
-          "feast_desc": "21st Sunday after Pentecost"
-         },
-     "123673":
-         {"id": "123673",
-          "type": "source",
-          "title": "München, Franziskanerkloster St. Anna - Bibliothek, 12o Cmm 1",
-          "provenance": "Italy",
-     "resources":
-         {"361434":
-              {"self": "/chants/361434cantus/",
-               "cantus_id": "/chants/cantus_id/002288/",
-               "feast": "/feasts/1616/"
-              },
-          "123673":
-              {"self": "/books/123673/",
-               "provenance": "/provenances/3608/"
-              }
-         }
+    {
+        "361434": {
+            "id": "361434",
+            "type": "chant",
+            "incipit": "Dixit dominus paralytico",
+            "cantus_id": "002288",
+            "feast": "Dom. 21 p. Pent.",
+            "feast_desc": "21st Sunday after Pentecost"
+        },
+        "123673": {
+            "id": "123673",
+            "type": "source",
+            "title": "München, Franziskanerkloster St. Anna - Bibliothek, 12o Cmm 1",
+            "provenance": "Italy"
+        },
+        "resources": {
+            "361434": {
+                "self": "/chants/361434cantus/",
+                "cantus_id": "/chants/cantus_id/002288/",
+                "feast": "/feasts/1616/"
+            },
+            "123673": {
+                "self": "/books/123673/",
+                "provenance": "/provenances/3608/"
+            }
+        }
     }
 
 For more information about searching, refer to :ref:`searching`.
