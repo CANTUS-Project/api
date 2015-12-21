@@ -37,7 +37,10 @@ JavaScript. They always have the same form:
                 "fieldA": "value URL",
                 "fieldB": "value URL"
             },
-        }
+        },
+        "sort_order": [
+            "id_value"
+        ]
     }
 
 Only fields with data will be included in a response, regardless of which fields are requested. In
@@ -61,7 +64,10 @@ addition, hyperlinks to corresponding resources are automatically included whene
                 "cantus_id": "/chants/cantus_id/002288/",
                 "feast": "/feasts/1616/"
             }
-        }
+        },
+        "sort_order": [
+            "361434"
+        ]
     }
 
 The response body tells us that this chant occurs during the feast called "Dom. 21 p. Pent." which
@@ -71,6 +77,17 @@ some "resources" fields may not have corresponding data fields.
 
 Use the :ref:`HEAD <head http method>` method to fetch the :http:header:`X-Cantus-Fields` header to
 determine which fields are available for a particular resource.
+
+Sort Order
+^^^^^^^^^^
+
+The ``'sort_order'`` member MUST be included in a response body, containing a list of the resource
+IDs in that response body.  This list is the only means to provide a response to the
+:http:header:`X-Cantus-Sort` header, or to provide relevance-based sorting of search results. User
+agents MAY ignore the ``'sort_order'`` if they wish.
+
+Note in the following section, for example, that the ``'sort-order'`` indicates the two resources
+should be displayed in the opposite order they appear in the JSON response itself.
 
 .. _`search response bodies`:
 
@@ -109,7 +126,11 @@ displayed. For example:
                 "self": "/books/123673/",
                 "provenance": "/provenances/3608/"
             }
-        }
+        },
+        "sort_order": [
+            "123673",
+            "361434"
+        ]
     }
 
 For more information about searching, refer to :ref:`searching`.
