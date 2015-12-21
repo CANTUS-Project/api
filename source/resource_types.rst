@@ -244,7 +244,6 @@ Chant
     :>json string finalis: (will appear in ``"resources"`` after the first version)
     :>json string full_text: ``"full_text"`` of the corresponding "CantusID" resource
     :>json string full_text_manuscript: full text as written in the manuscript
-    :>json string full_text_simssa: full text for SIMSSA use
     :>json string volpiano: neume information to be rendered with the "Volpiano" font
     :>json string notes:
     :>json string cao_concordances:
@@ -252,6 +251,8 @@ Chant
     :>json string proofreader: ``"display_name"`` of an "Indexer" resource
     :>json string melody_id: (will appear in ``"resources"`` after the first version)
     :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+    :>json string proofread_fulltext: Whether the "fulltext" field was proofread.
+    :>json string proofread_fulltext_manuscript: Whether the "fulltext_manuscript" field was proofread.
     :>json string resources>source: URL to the containing "Source" resource
     :>json string resources>office: URL to the corresponding "Office"
     :>json string resources>genre: *not provided* (ask the "CantusID" resource)
