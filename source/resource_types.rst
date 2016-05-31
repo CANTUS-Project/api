@@ -95,12 +95,17 @@ About the "id" Field
 
 For "view" URLs, where ``id?`` makes part of the server-provided URL, user agents MUST form a full
 URL by substituting a resource's unique "id" value in that part of the URL. The full three-character
-string, ``id?``, must be removed from the URL. Cantus API "id" values may consist of any alphanumeric
-character valid in a URL, plus hyphens and underscores.
+string, ``id?``, must be removed from the URL.
+
+Cantus API "id" values may consist of the characters A through Z, a through z, and the digits 1
+though 0, plus hyphens and underscores. The first and last characters of an "id" MUST NOT be a
+hyphen or underscore (`-` or `_`). If a user agent requests a resource with an invalid "id" the
+server MUST respond with the :http:statuscode:`422` HTTP status code.
 
 The following points also apply:
 
-- A resource's "id" MUST NOT change through the resource's lifetime.
+- A resource's "id" MUST refer to the same resource through the existence of that "id." However, a
+  resource may change its "id" at any time.
 - Changing attributes, properties, or data in a resource MUST NOT change the "id" field.
 - A resource's "id" field MAY be prefixed with an identifier indicating which database holds the
   resources's authoritative copy.

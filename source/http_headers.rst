@@ -266,11 +266,11 @@ Cantus-Specific Extension Headers
 These headers extend the HTTP standard in ways specific to the Cantus API. We create extension
 headers only when no existing solution is sensible.
 
-The server SHOULD return a `400 Bad Request <https://tools.ietf.org/html/rfc7231#section-6.5.1>`_
-response code for any Cantus-specific request headers that contain invalid values. However, for a
-request header that does not apply to the requested resource (like :http:header:`X-Cantus-Page` for
-a "view" URL that will only return a single resource) the server MUST ignore the extraneous headers
-regardless of whether their value is valid.
+The server SHOULD return a :http:statuscode:`400` response code for any Cantus-specific request
+headers that contain invalid values. However, for a request header that does not apply to the
+requested resource (like :http:header:`X-Cantus-Page` for a "view" URL that will only return a
+single resource) the server MUST ignore the extraneous headers regardless of whether their value
+is valid.
 
 X-Cantus-Version
 ^^^^^^^^^^^^^^^^
