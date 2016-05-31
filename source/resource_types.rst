@@ -259,13 +259,16 @@ Chant
     :>json string proofread_fulltext: Whether the "fulltext" field was proofread.
     :>json string proofread_fulltext_manuscript: Whether the "fulltext_manuscript" field was proofread.
     :>json string resources>source: URL to the containing "Source" resource
+    :>json string resources>source_id: resource ID for previous
     :>json string resources>office: URL to the corresponding "Office"
-    :>json string resources>genre: *not provided* (ask the "CantusID" resource)
-    :>json string resources>cantus_id: URL to the corresponding "CantusID" resource
+    :>json string resources>office_id: resource ID for previous
+    :>json string resources>genre: URL to the corresponding "Genre"
+    :>json string resources>genre_id: resource ID for previous
     :>json string resources>feast: URL to the corresponding "Feast" resource
+    :>json string resources>feast_id: resource ID for previous
     :>json string resources>image_link: URL to an image, or a Web page with an image, of this Chant
     :>json string resources>proofreader: URL to an "Indexer" resource
-    :>json string resources>cantus_id: URL to the corresponding "CantusID" resource
+    :>json string resources>proofreader_id: resource ID for previous
 
 .. _`source resource type`:
 
@@ -300,10 +303,17 @@ Source
     :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
     :>json object resources: Links to other indexer who share the same characteristics.
     :>json string resources>provenance:
+    :>json string resources>provenance_id: resource ID for previous
     :>json string resources>century:
+    :>json string resources>century_id: resource ID for previous
     :>json string resources>notation_style:
+    :>json string resources>notation_style_id: resource ID for previous
     :>json string resources>editors: List of URLs to Indexer resources.
+    :>json string resources>editors_id: resource ID for previous
     :>json string resources>indexer: List of URLs to Indexer resources.
+    :>json string resources>indexer_id: resource ID for previous
     :>json string resources>proofreaders: List of URLs to Indexer resources.
+    :>json string resources>proofreaders_id: resource ID for previous
     :>json string resources>source_status:
+    :>json string resources>source_status_id: resource ID for previous
     :>json string resources>image_link: Root URL linking to images for the entire source.

@@ -35,7 +35,9 @@ JavaScript. They always have the same form:
         "resources": {
             "id_value": {
                 "fieldA": "value URL",
-                "fieldB": "value URL"
+                "fieldA_id": "someID",
+                "fieldB": "value URL",
+                "fieldB_id": "otherID"
             },
         },
         "sort_order": [
@@ -62,7 +64,8 @@ addition, hyperlinks to corresponding resources are automatically included whene
             "361434": {
                 "self": "/chants/361434cantus/",
                 "cantus_id": "/chants/cantus_id/002288/",
-                "feast": "/feasts/1616/"
+                "feast": "/feasts/1616/",
+                "feast_id": "1616"
             }
         },
         "sort_order": [
@@ -120,11 +123,13 @@ displayed. For example:
             "361434": {
                 "self": "/chants/361434cantus/",
                 "cantus_id": "/chants/cantus_id/002288/",
-                "feast": "/feasts/1616/"
+                "feast": "/feasts/1616/",
+                "feast_id": "1616"
             },
             "123673": {
                 "self": "/books/123673/",
-                "provenance": "/provenances/3608/"
+                "provenance": "/provenances/3608/",
+                "provenance_id": "3608"
             }
         },
         "sort_order": [

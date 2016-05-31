@@ -52,7 +52,7 @@ copyright = u'2016 Christopher Antila'
 # built documents.
 #
 # The short X.Y version.
-version = '0.2.4'
+version = '0.2.5'
 # The full version, including alpha/beta/rc tags.
 release = '{}'.format(version)
 
@@ -248,3 +248,6 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 #intersphinx_mapping = {'http://docs.python.org/': None}
+
+
+http_strict_mode = False

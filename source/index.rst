@@ -156,22 +156,15 @@ The fastest and safest way to ensure a user agent and server use compliant versi
 API is to use a :ref:`HEAD http method` or :ref:`OPTIONS http method` request on the root URL.
 
 .. http:head:: /
-    :synopsis: Find the API version supported on the server.
+
+    Find the API version supported on the server.
 
     :resheader X-Cantus-Version: Indicates the Cantus API version implemented by a client or server.
         Values are described in :ref:`version numbers`.
     :resheader Server: Indicates the implementation and its version. This SHOULD NOT be used by the
-        user agent to modify behaviour, but it may be of interest for debugging or other purposes.
-        The reference implementation is called "Abbott."
+        user agent to modify behaviour, but it MAY be of interest for debugging or other purposes.
+        The reference implementation is called "Abbot."
 
-
-Development Plan
-^^^^^^^^^^^^^^^^
-
-The first "full" release of the Cantus API, version 1.0, is based on HTTP, and allows read-only
-access to resources. The second "full" release will add creation and editing capabilities to the
-API. We will aim for interoperability between these versions to the fullest extent possible, but
-some backward-incompatible changes may be required in the second version.
 
 Relationship to Existing Standards
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
