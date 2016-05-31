@@ -120,7 +120,6 @@ Root URL JSON Specification
     :resjson URL resources.browse.all: URL to browse/search resources of every type.
     :resjson URL resources.browse.chant: URL for Chants.
     :resjson URL resources.browse.source: URL for Sources.
-    :resjson URL resources.browse.cantusid: URL for Cantusids.
     :resjson URL resources.browse.indexer: URL for Indexers.
     :resjson URL resources.browse.feast: URL for Feasts.
     :resjson URL resources.browse.genre: URL for Genres.
@@ -135,7 +134,6 @@ Root URL JSON Specification
     :resjson object resources.view: URL patterns to retrieve single resources with a known "id."
     :resjson URL resources.view.chant: Pattern for a :ref:`chant resource type`.
     :resjson URL resources.view.source: Pattern for a :ref:`source resource type`.
-    :resjson URL resources.view.cantusid: Pattern for a :ref:`cantusid resource type`.
     :resjson URL resources.view.indexer: Pattern for a :ref:`indexer resource type`.
     :resjson URL resources.view.feast: Pattern for a :ref:`feast resource type`.
     :resjson URL resources.view.genre: Pattern for a :ref:`genre resource type`.

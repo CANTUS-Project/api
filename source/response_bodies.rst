@@ -63,7 +63,6 @@ addition, hyperlinks to corresponding resources are automatically included whene
         "resources": {
             "361434": {
                 "self": "/chants/361434cantus/",
-                "cantus_id": "/chants/cantus_id/002288/",
                 "feast": "/feasts/1616/",
                 "feast_id": "1616"
             }
@@ -122,7 +121,6 @@ displayed. For example:
         "resources": {
             "361434": {
                 "self": "/chants/361434cantus/",
-                "cantus_id": "/chants/cantus_id/002288/",
                 "feast": "/feasts/1616/",
                 "feast_id": "1616"
             },

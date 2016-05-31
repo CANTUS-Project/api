@@ -200,27 +200,8 @@ Genre
 Complex Resource Types
 ----------------------
 
-The following resource types (CantusID, Chant, Indexer, Source) hold many data fields, some of which
-cross-reference a simple resource described in the previous section, or another complex resource.
-
-.. _`cantusid resource type`:
-
-CantusID
-^^^^^^^^
-
-.. http:get:: /(view.cantusid)/(string:id)/
-
-    A "Cantus ID" resource is an abstraction across multiple actual chants. These are available at
-    the URLs indicated by ``["view"]["cantusid"]`` and ``["browse"]["cantusid"]``.
-
-    Note that the "incipit" and "full_text" fields are not necessarily the same across all chants
-    with the same Cantus ID and therefore may not be correct for a particular chant.
-
-    :resjson string id: the Cantus ID of this resourse
-    :resjson string genre: ``"name"`` field of the corresponding "Genre" resource
-    :resjson string incipit: the chant's incipit with standardized spelling
-    :resjson string full_text: full text with standardized spelling
-    :resjson string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+The following resource types (Chant and Source) hold many data fields, some of which cross-reference
+a simple resource described in the previous section, or another complex resource.
 
 .. _`chant resource type`:
 
@@ -239,15 +220,14 @@ Chant
     :resjson string folio: E.g., ``"05v"``
     :resjson string sequence:
     :resjson string office: the "name" field of the corresponding "Office" resource
-    :resjson string genre: the "name" field of the corresponding "Genre" resource, provided through the "CantusID" resource
+    :resjson string genre: the "name" field of the corresponding "Genre" resource
     :resjson string position:
-    :resjson string cantus_id: ``"id"`` field of the corresponding "CantusID" resource
     :resjson string feast: ``"name"`` field of the corresponding "Feast" resource (e.g., "Dom. 21 p. Pent.")
     :resjson string feast_desc: ``"description"`` of the corresponding "Feast" resource (e.g., "21st Sunday after Pentecost")
     :resjson string mode: (will appear in ``"resources"`` after the first version)
     :resjson string differentia:
     :resjson string finalis: (will appear in ``"resources"`` after the first version)
-    :resjson string full_text: ``"full_text"`` of the corresponding "CantusID" resource
+    :resjson string full_text: ``"full_text"``
     :resjson string full_text_manuscript: full text as written in the manuscript
     :resjson string volpiano: neume information to be rendered with the "Volpiano" font
     :resjson string notes:

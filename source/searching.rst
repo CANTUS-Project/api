@@ -263,7 +263,6 @@ Unsearchable Resource Types
 I decided it did not make sense to search for these---users will always want to search something
 else too.
 
-* Cantusid
 * Portfolio
 * Segment
 * Source Status
