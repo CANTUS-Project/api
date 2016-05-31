@@ -47,13 +47,12 @@ may also be incorporated directly in the SEARCH request body, as indicated below
     - X-Cantus-Per-Page as ``"per-page"``
     - X-Cantus-Page as ``"page"``
     - X-Cantus-Sort as ``"sort"``
-    - X-Cantus-Search-Help as ``"search-help"``
 
-If a header and request body member hold conflicting values (e.g., ``X-Cantus-Search-Help: true`` in
-the headers but ``"search-help": false`` in the request body) the server MUST use the value from the
-request body, disregarding the value from the header, even if the request body's value is invalid
-and the header's value is valid. The same error response codes SHOULD be provided as for an error
-in the corresponding header.
+If a header and request body member hold conflicting values (e.g., ``X-Cantus-Page: 10`` in the
+headers but ``"page": 10`` in the request body) the server MUST use the value from the request body,
+disregarding the value from the header, even if the request body's value is invalid and the header's
+value is valid. The same error response codes SHOULD be provided as for an error in the
+corresponding header.
 
 The grammar of the ``"query"`` string is described below in :ref:`<cantus query grammar>`.
 
@@ -163,9 +162,7 @@ You may include search terms the following ways:
 - Grouping with ``()``, as in ``'(cat AND breading) OR silliness'``.
 
 Refer to `this page <https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser>`_
-for more complete descriptions. Clients may provide users the opportunity to use the
-:ref:`X-Cantus-Search-Help` header, which allows the server to run a less strict query in
-the hope it will return more results.
+for more complete descriptions.
 
 Fetching a Resource with Its "id"
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

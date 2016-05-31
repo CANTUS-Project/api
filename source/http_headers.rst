@@ -215,7 +215,7 @@ Preflight request:
 
     OPTIONS https://abbott.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
     Access-Control-Request-Method: SEARCH
-    Access-Control-Request-Headers: X-Cantus-Search-Help, X-Cantus-Page, X-Cantus-Garbage-Header
+    Access-Control-Request-Headers: X-Cantus-Page, X-Cantus-Garbage-Header
     Origin: https://app.cantusproject.org/
     ...
 
@@ -226,7 +226,7 @@ Preflight response:
     HTTP/1.1 200 OK
     Allow: GET, HEAD, OPTIONS, SEARCH
     Access-Control-Allow-Origin: https://app.cantusproject.org/
-    Access-Control-Allow-Headers: X-Cantus-Search-Help, X-Cantus-Page
+    Access-Control-Allow-Headers: X-Cantus-Page
     Access-Control-Allow-Method: SEARCH
     Access-Control-Max-Age: 86400
     ...
@@ -236,7 +236,6 @@ Actual request:
 .. sourcecode:: http
 
     SEARCH https://abbott.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
-    X-Cantus-Search-Help: true
     X-Cantus-Page: 4
     Origin: https://app.cantusproject.org/
     ...
@@ -250,8 +249,7 @@ Actual response:
     HTTP/1.1 200 OK
     Access-Control-Allow-Origin: https://app.cantusproject.org/
     Access-Control-Max-Age: 86400
-    Access-Control-Expose-Headers: X-Cantus-Search-Help, X-Cantus-Page, X-Cantus-Per-Page, { others }
-    X-Cantus-Search-Help: true
+    Access-Control-Expose-Headers: X-Cantus-Page, X-Cantus-Per-Page, { others }
     X-Cantus-Page: 4
     X-Cantus-Per-Page: 10
     ...
@@ -373,16 +371,6 @@ equivalent response header to indicate the actual sort field and direction used.
 .. note:: For search queries, clients are recommended to trust the default relevance-based sort
     order. Cantus servers should be optimized to provide the most relevant results by default. This
     header makes the most sense when a user wants to browse all of a category.
-
-.. _`X-Cantus-Search-Help`:
-
-X-Cantus-Search-Help
-^^^^^^^^^^^^^^^^^^^^
-
-If the client indicates ``true`` in the :http:header:`X-Cantus-Search-Help` header, the server MAY
-modify a search request to be more lenient if the original search request produces no results. In
-this case, the server MUST return the actual query in the :http:header:`X-Cantus-Search-Help`
-response header.
 
 .. _`cantus header example`:
 
