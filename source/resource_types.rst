@@ -127,10 +127,10 @@ database---perhaps never.
 
     Most simple resources follow this pattern.
 
-    :>json string id: The "id" of this resource.
-    :>json string name: Human-readable name for the resource.
-    :>json string description: Brief explanation of the resource.
-    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+    :resjson string id: The "id" of this resource.
+    :resjson string name: Human-readable name for the resource.
+    :resjson string description: Brief explanation of the resource.
+    :resjson string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 The following simple resource types use the default fields described above:
 
@@ -155,14 +155,14 @@ Indexer
     An "Indexer" corresponds to a human who has entered or modified data in the Cantus Database.
     The set of fields is entirely different from other simple resource types.
 
-    :>json string id: The "id" of this resource.
-    :>json string display_name: The indexer's name, as displayed.
-    :>json string given_name: The indexer's given name.
-    :>json string family_name: The indexer's family name.
-    :>json string institution: The indexer's associated university or research institution.
-    :>json string city: The city where the indexer lives.
-    :>json string country: The country where the indexer lives.
-    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+    :resjson string id: The "id" of this resource.
+    :resjson string display_name: The indexer's name, as displayed.
+    :resjson string given_name: The indexer's given name.
+    :resjson string family_name: The indexer's family name.
+    :resjson string institution: The indexer's associated university or research institution.
+    :resjson string city: The city where the indexer lives.
+    :resjson string country: The country where the indexer lives.
+    :resjson string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 .. _`feast resource type`:
 
@@ -173,12 +173,12 @@ Feast
 
     Feast resources add two fields over the standard set for "simple" resources.
 
-    :>json string id: The "id" of this resource.
-    :>json string name: Human-readable name for the feast.
-    :>json string description: Brief explanation of the feast.
-    :>json string date: Date on which the feast occurs.
-    :>json string feast_code: Standardized feast code for the feast.
-    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+    :resjson string id: The "id" of this resource.
+    :resjson string name: Human-readable name for the feast.
+    :resjson string description: Brief explanation of the feast.
+    :resjson string date: Date on which the feast occurs.
+    :resjson string feast_code: Standardized feast code for the feast.
+    :resjson string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 .. _`genre resource type`:
 
@@ -189,11 +189,11 @@ Genre
 
     Genre resources add one field over the standard set for "simple" resources.
 
-    :>json string id: The "id" of this resource.
-    :>json string name: Human-readable name for the genre.
-    :>json string description: Brief explanation of the genre.
-    :>json string mass_or_office: A case-insensitive string, either ``"mass"`` or ``"office"``.
-    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+    :resjson string id: The "id" of this resource.
+    :resjson string name: Human-readable name for the genre.
+    :resjson string description: Brief explanation of the genre.
+    :resjson string mass_or_office: A case-insensitive string, either ``"mass"`` or ``"office"``.
+    :resjson string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 .. _`complex resource types`:
 
@@ -216,11 +216,11 @@ CantusID
     Note that the "incipit" and "full_text" fields are not necessarily the same across all chants
     with the same Cantus ID and therefore may not be correct for a particular chant.
 
-    :>json string id: the Cantus ID of this resourse
-    :>json string genre: ``"name"`` field of the corresponding "Genre" resource
-    :>json string incipit: the chant's incipit with standardized spelling
-    :>json string full_text: full text with standardized spelling
-    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+    :resjson string id: the Cantus ID of this resourse
+    :resjson string genre: ``"name"`` field of the corresponding "Genre" resource
+    :resjson string incipit: the chant's incipit with standardized spelling
+    :resjson string full_text: full text with standardized spelling
+    :resjson string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
 
 .. _`chant resource type`:
 
@@ -232,43 +232,43 @@ Chant
     A "Chant" resource is a chant written in a Source. These are available at the URLs indicated by
     ``["view"]["chant"]`` and ``["browse"]["chant"]``.
 
-    :>json string id:
-    :>json string incipit:
-    :>json string source: the "title" field of the corresponding "Source" resource
-    :>json string marginalia:
-    :>json string folio: E.g., ``"05v"``
-    :>json string sequence:
-    :>json string office: the "name" field of the corresponding "Office" resource
-    :>json string genre: the "name" field of the corresponding "Genre" resource, provided through the "CantusID" resource
-    :>json string position:
-    :>json string cantus_id: ``"id"`` field of the corresponding "CantusID" resource
-    :>json string feast: ``"name"`` field of the corresponding "Feast" resource (e.g., "Dom. 21 p. Pent.")
-    :>json string feast_desc: ``"description"`` of the corresponding "Feast" resource (e.g., "21st Sunday after Pentecost")
-    :>json string mode: (will appear in ``"resources"`` after the first version)
-    :>json string differentia:
-    :>json string finalis: (will appear in ``"resources"`` after the first version)
-    :>json string full_text: ``"full_text"`` of the corresponding "CantusID" resource
-    :>json string full_text_manuscript: full text as written in the manuscript
-    :>json string volpiano: neume information to be rendered with the "Volpiano" font
-    :>json string notes:
-    :>json string cao_concordances:
-    :>json string siglum: the "siglum" field of the corresponding "Source" resource
-    :>json string proofreader: ``"display_name"`` of an "Indexer" resource
-    :>json string melody_id: (will appear in ``"resources"`` after the first version)
-    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
-    :>json string proofread_fulltext: Whether the "fulltext" field was proofread.
-    :>json string proofread_fulltext_manuscript: Whether the "fulltext_manuscript" field was proofread.
-    :>json string resources>source: URL to the containing "Source" resource
-    :>json string resources>source_id: resource ID for previous
-    :>json string resources>office: URL to the corresponding "Office"
-    :>json string resources>office_id: resource ID for previous
-    :>json string resources>genre: URL to the corresponding "Genre"
-    :>json string resources>genre_id: resource ID for previous
-    :>json string resources>feast: URL to the corresponding "Feast" resource
-    :>json string resources>feast_id: resource ID for previous
-    :>json string resources>image_link: URL to an image, or a Web page with an image, of this Chant
-    :>json string resources>proofreader: URL to an "Indexer" resource
-    :>json string resources>proofreader_id: resource ID for previous
+    :resjson string id:
+    :resjson string incipit:
+    :resjson string source: the "title" field of the corresponding "Source" resource
+    :resjson string marginalia:
+    :resjson string folio: E.g., ``"05v"``
+    :resjson string sequence:
+    :resjson string office: the "name" field of the corresponding "Office" resource
+    :resjson string genre: the "name" field of the corresponding "Genre" resource, provided through the "CantusID" resource
+    :resjson string position:
+    :resjson string cantus_id: ``"id"`` field of the corresponding "CantusID" resource
+    :resjson string feast: ``"name"`` field of the corresponding "Feast" resource (e.g., "Dom. 21 p. Pent.")
+    :resjson string feast_desc: ``"description"`` of the corresponding "Feast" resource (e.g., "21st Sunday after Pentecost")
+    :resjson string mode: (will appear in ``"resources"`` after the first version)
+    :resjson string differentia:
+    :resjson string finalis: (will appear in ``"resources"`` after the first version)
+    :resjson string full_text: ``"full_text"`` of the corresponding "CantusID" resource
+    :resjson string full_text_manuscript: full text as written in the manuscript
+    :resjson string volpiano: neume information to be rendered with the "Volpiano" font
+    :resjson string notes:
+    :resjson string cao_concordances:
+    :resjson string siglum: the "siglum" field of the corresponding "Source" resource
+    :resjson string proofreader: ``"display_name"`` of an "Indexer" resource
+    :resjson string melody_id: (will appear in ``"resources"`` after the first version)
+    :resjson string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+    :resjson string proofread_fulltext: Whether the "fulltext" field was proofread.
+    :resjson string proofread_fulltext_manuscript: Whether the "fulltext_manuscript" field was proofread.
+    :resjson string resources>source: URL to the containing "Source" resource
+    :resjson string resources>source_id: resource ID for previous
+    :resjson string resources>office: URL to the corresponding "Office"
+    :resjson string resources>office_id: resource ID for previous
+    :resjson string resources>genre: URL to the corresponding "Genre"
+    :resjson string resources>genre_id: resource ID for previous
+    :resjson string resources>feast: URL to the corresponding "Feast" resource
+    :resjson string resources>feast_id: resource ID for previous
+    :resjson string resources>image_link: URL to an image, or a Web page with an image, of this Chant
+    :resjson string resources>proofreader: URL to an "Indexer" resource
+    :resjson string resources>proofreader_id: resource ID for previous
 
 .. _`source resource type`:
 
@@ -280,40 +280,40 @@ Source
     A "Source" resource is for a collection of folia containing Chants (usually a book). These are
     be avialable at the URLs indicated by ``["view"]["source"]`` and ``["browse"]["source"]``.
 
-    :>json string id: The "id" of this resource.
-    :>json string title: Full Manuscript Identification (City, Archive, Shelf-mark)
-    :>json string rism: RISM number
-    :>json string siglum: Siglum
-    :>json string provenance: Provenance
-    :>json string provenance_detail: More detail about the provenance
-    :>json string date: Date
-    :>json string century: Century
-    :>json string notation_style: Notation used for the source
-    :>json string editors: List of ``"display_name"`` of indexers who edited this manuscript
-    :>json string indexers: List of ``"display_name"`` of indexers who entered this manuscript
-    :>json string proofreaders: List of ``"display_name"`` of indexers who proofread this manuscript
-    :>json string segment: Segment (i.e., source database)
-    :>json string source_status: Status of this source
-    :>json string source_status_desc: Elaboration of ``"source_status"``---probably never used.
-    :>json string summary: Summary
-    :>json string liturgical_occasions: Liturgical occasions
-    :>json string description: Description
-    :>json string indexing_notes: Indexing notes
-    :>json string indexing_date: Indexing date
-    :>json string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
-    :>json object resources: Links to other indexer who share the same characteristics.
-    :>json string resources>provenance:
-    :>json string resources>provenance_id: resource ID for previous
-    :>json string resources>century:
-    :>json string resources>century_id: resource ID for previous
-    :>json string resources>notation_style:
-    :>json string resources>notation_style_id: resource ID for previous
-    :>json string resources>editors: List of URLs to Indexer resources.
-    :>json string resources>editors_id: resource ID for previous
-    :>json string resources>indexer: List of URLs to Indexer resources.
-    :>json string resources>indexer_id: resource ID for previous
-    :>json string resources>proofreaders: List of URLs to Indexer resources.
-    :>json string resources>proofreaders_id: resource ID for previous
-    :>json string resources>source_status:
-    :>json string resources>source_status_id: resource ID for previous
-    :>json string resources>image_link: Root URL linking to images for the entire source.
+    :resjson string id: The "id" of this resource.
+    :resjson string title: Full Manuscript Identification (City, Archive, Shelf-mark)
+    :resjson string rism: RISM number
+    :resjson string siglum: Siglum
+    :resjson string provenance: Provenance
+    :resjson string provenance_detail: More detail about the provenance
+    :resjson string date: Date
+    :resjson string century: Century
+    :resjson string notation_style: Notation used for the source
+    :resjson string editors: List of ``"display_name"`` of indexers who edited this manuscript
+    :resjson string indexers: List of ``"display_name"`` of indexers who entered this manuscript
+    :resjson string proofreaders: List of ``"display_name"`` of indexers who proofread this manuscript
+    :resjson string segment: Segment (i.e., source database)
+    :resjson string source_status: Status of this source
+    :resjson string source_status_desc: Elaboration of ``"source_status"``---probably never used.
+    :resjson string summary: Summary
+    :resjson string liturgical_occasions: Liturgical occasions
+    :resjson string description: Description
+    :resjson string indexing_notes: Indexing notes
+    :resjson string indexing_date: Indexing date
+    :resjson string drupal_path: Optional URL to this resource on the Cantus Drupal instance.
+    :resjson object resources: Links to other indexer who share the same characteristics.
+    :resjson string resources>provenance:
+    :resjson string resources>provenance_id: resource ID for previous
+    :resjson string resources>century:
+    :resjson string resources>century_id: resource ID for previous
+    :resjson string resources>notation_style:
+    :resjson string resources>notation_style_id: resource ID for previous
+    :resjson string resources>editors: List of URLs to Indexer resources.
+    :resjson string resources>editors_id: resource ID for previous
+    :resjson string resources>indexer: List of URLs to Indexer resources.
+    :resjson string resources>indexer_id: resource ID for previous
+    :resjson string resources>proofreaders: List of URLs to Indexer resources.
+    :resjson string resources>proofreaders_id: resource ID for previous
+    :resjson string resources>source_status:
+    :resjson string resources>source_status_id: resource ID for previous
+    :resjson string resources>image_link: Root URL linking to images for the entire source.

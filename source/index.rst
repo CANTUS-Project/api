@@ -69,8 +69,7 @@ the URLs in the following way:
 .. sourcecode:: http
 
     HTTP/1.1 200 OK
-    Location (server_address)/
-    ...
+    Location: (server_address)/
 
     {
         "resources":
@@ -115,39 +114,39 @@ Root URL JSON Specification
     with the :ref:`id <resource ids>` of a specific resource. All other URLs should be used wihtout
     modification.
 
-    :>json object resources: URLs and URL patterns to database resources.
-    :>json object resources.browse: URLs to retrieve all resources of a type (with a GET request) or
+    :resjson object resources: URLs and URL patterns to database resources.
+    :resjson object resources.browse: URLs to retrieve all resources of a type (with a GET request) or
                                     only resources that match some criteria (with a SEARCH request).
-    :>json URL resources.browse.all: URL to browse/search resources of every type.
-    :>json URL resources.browse.chant: URL for Chants.
-    :>json URL resources.browse.source: URL for Sources.
-    :>json URL resources.browse.cantusid: URL for Cantusids.
-    :>json URL resources.browse.indexer: URL for Indexers.
-    :>json URL resources.browse.feast: URL for Feasts.
-    :>json URL resources.browse.genre: URL for Genres.
-    :>json URL resources.browse.century: URL for Centuries.
-    :>json URL resources.browse.notation: URL for Notations.
-    :>json URL resources.browse.office: URL for an Offices.
-    :>json URL resources.browse.portfolio: URL for Portfolio Categories (portfolia).
-    :>json URL resources.browse.provenance: URL for Provenances.
-    :>json URL resources.browse.siglum: URL for RISM Siglums (sigla).
-    :>json URL resources.browse.segment: URL for Database Segments.
-    :>json URL resources.browse.status: URL for Source Statuses.
-    :>json object resources.view: URL patterns to retrieve single resources with a known "id."
-    :>json URL resources.view.chant: Pattern for a :ref:`chant resource type`.
-    :>json URL resources.view.source: Pattern for a :ref:`source resource type`.
-    :>json URL resources.view.cantusid: Pattern for a :ref:`cantusid resource type`.
-    :>json URL resources.view.indexer: Pattern for a :ref:`indexer resource type`.
-    :>json URL resources.view.feast: Pattern for a :ref:`feast resource type`.
-    :>json URL resources.view.genre: Pattern for a :ref:`genre resource type`.
-    :>json URL resources.view.century: Pattern for a :ref:`Century <simple resource types>`.
-    :>json URL resources.view.notation: Pattern for a :ref:`Notation <simple resource types>`.
-    :>json URL resources.view.office: Pattern for an :ref:`Office <simple resource types>`.
-    :>json URL resources.view.portfolio: Pattern for a :ref:`Portfolio Category <simple resource types>`.
-    :>json URL resources.view.provenance: Pattern for a :ref:`Provenance <simple resource types>`.
-    :>json URL resources.view.siglum: Pattern for a :ref:`RISM Siglum <simple resource types>`.
-    :>json URL resources.view.segment: Pattern for a :ref:`Database Segment <simple resource types>`.
-    :>json URL resources.view.status: Pattern for a :ref:`Source Status <simple resource types>`.
+    :resjson URL resources.browse.all: URL to browse/search resources of every type.
+    :resjson URL resources.browse.chant: URL for Chants.
+    :resjson URL resources.browse.source: URL for Sources.
+    :resjson URL resources.browse.cantusid: URL for Cantusids.
+    :resjson URL resources.browse.indexer: URL for Indexers.
+    :resjson URL resources.browse.feast: URL for Feasts.
+    :resjson URL resources.browse.genre: URL for Genres.
+    :resjson URL resources.browse.century: URL for Centuries.
+    :resjson URL resources.browse.notation: URL for Notations.
+    :resjson URL resources.browse.office: URL for an Offices.
+    :resjson URL resources.browse.portfolio: URL for Portfolio Categories (portfolia).
+    :resjson URL resources.browse.provenance: URL for Provenances.
+    :resjson URL resources.browse.siglum: URL for RISM Siglums (sigla).
+    :resjson URL resources.browse.segment: URL for Database Segments.
+    :resjson URL resources.browse.status: URL for Source Statuses.
+    :resjson object resources.view: URL patterns to retrieve single resources with a known "id."
+    :resjson URL resources.view.chant: Pattern for a :ref:`chant resource type`.
+    :resjson URL resources.view.source: Pattern for a :ref:`source resource type`.
+    :resjson URL resources.view.cantusid: Pattern for a :ref:`cantusid resource type`.
+    :resjson URL resources.view.indexer: Pattern for a :ref:`indexer resource type`.
+    :resjson URL resources.view.feast: Pattern for a :ref:`feast resource type`.
+    :resjson URL resources.view.genre: Pattern for a :ref:`genre resource type`.
+    :resjson URL resources.view.century: Pattern for a :ref:`Century <simple resource types>`.
+    :resjson URL resources.view.notation: Pattern for a :ref:`Notation <simple resource types>`.
+    :resjson URL resources.view.office: Pattern for an :ref:`Office <simple resource types>`.
+    :resjson URL resources.view.portfolio: Pattern for a :ref:`Portfolio Category <simple resource types>`.
+    :resjson URL resources.view.provenance: Pattern for a :ref:`Provenance <simple resource types>`.
+    :resjson URL resources.view.siglum: Pattern for a :ref:`RISM Siglum <simple resource types>`.
+    :resjson URL resources.view.segment: Pattern for a :ref:`Database Segment <simple resource types>`.
+    :resjson URL resources.view.status: Pattern for a :ref:`Source Status <simple resource types>`.
 
 Find Server Version
 ^^^^^^^^^^^^^^^^^^^
@@ -210,7 +209,6 @@ Response:
 .. sourcecode:: http
 
     HTTP/1.1 200 OK
-    ...
 
     {
         "resources": {
@@ -232,7 +230,7 @@ the "Chant" resources that contain "dixit dominus":
 
 .. sourcecode:: http
 
-    HEAD /(browse_chants)/357685/ HTTP/1.1
+    HEAD https://(browse_chants)/357685/ HTTP/1.1
     If-None-Match "7827ff38cb8ef147d9f5edb749a0f300dac2ebe1"
 
 Consider the following response:
@@ -243,7 +241,6 @@ Consider the following response:
     ETag "7827ff38cb8ef147d9f5edb749a0f300dac2ebe1"
     Server "Abbott/1.0"
     X-Cantus-Fields: feast differentia position genre source sequence office fest_desc cantus_id id mode full_text incipit folio
-    ...
 
 With this (abbreviated) header information the client can make an informed decision about how to
 proceed. The :http:header:`If-None-Match` and :http:header:`ETag` headers tell us that this chant's

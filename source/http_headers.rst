@@ -217,6 +217,7 @@ Preflight request:
     Access-Control-Request-Method: SEARCH
     Access-Control-Request-Headers: X-Cantus-Page, X-Cantus-Garbage-Header
     Origin: https://app.cantusproject.org/
+
     ...
 
 Preflight response:
@@ -229,6 +230,7 @@ Preflight response:
     Access-Control-Allow-Headers: X-Cantus-Page
     Access-Control-Allow-Method: SEARCH
     Access-Control-Max-Age: 86400
+
     ...
 
 Actual request:
@@ -238,7 +240,6 @@ Actual request:
     SEARCH https://abbott.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
     X-Cantus-Page: 4
     Origin: https://app.cantusproject.org/
-    ...
 
     {"query": "incipit:deus"}
 
@@ -252,7 +253,6 @@ Actual response:
     Access-Control-Expose-Headers: X-Cantus-Page, X-Cantus-Per-Page, { others }
     X-Cantus-Page: 4
     X-Cantus-Per-Page: 10
-    ...
 
     { /* chant data here */ }
 
