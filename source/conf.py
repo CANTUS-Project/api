@@ -45,14 +45,14 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Cantus API'
-copyright = u'2015, Christopher Antila'
+copyright = u'2016 Christopher Antila'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = '0.2.2'
+version = '0.2.3'
 # The full version, including alpha/beta/rc tags.
 release = '{}'.format(version)
 
@@ -107,7 +107,7 @@ html_theme = 'agogo'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+html_title = '{0} (version {1})'.format(project, release)
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None

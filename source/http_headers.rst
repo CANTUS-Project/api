@@ -312,45 +312,6 @@ X-Cantus-Extra-Fields
 If some, but not all, resources contain a field, the server MUST include that field name in this
 header. This field has no meaning in a request. Refer also to the :ref:`cantus header example`.
 
-X-Cantus-No-Xref
-^^^^^^^^^^^^^^^^
-
-Boolean header to instruct the server not to do cross-reference lookup in complex resources. Cross-
-referenced fields are what define complex resources (:ref:`complex resource types`) and they may be
-stored in the server's database in various ways. Filling all the cross-referenced fields may take
-significant additional time, and may not be desirable in all use cases.
-
-Setting this request header to ``'true'`` (case insensitive) means the server MUST NOT process
-fields that would be provided by cross-references. The server MUST also include the "id" value of
-any resources that would be used to create cross-references, formed by appending ``'_id'`` to the
-resource type: a Feast associated with a Chant would therefore appear as, for example,
-``{'feast_id': '62'}``.
-
-Example response body with :http:header:`X-Cantus-No-Xref` set to ``false`` (or not set):
-
-.. sourcecode:: http
-
-    {"149243": {
-        "id": "149243",
-        "type": "chant",
-        "inicipit": "Estote parati similes",
-        "feast": "Nativitas Domini",
-        "feast_desc": "Christmas Day"
-        }
-    }
-
-Example response body with :http:header:`X-Cantus-No-Xref` set to ``true``.
-
-.. sourcecode:: http
-
-    {"149243": {
-        "id": "149243",
-        "type": "chant",
-        "inicipit": "Estote parati similes",
-        "feast_id": "2745"
-        }
-    }
-
 X-Cantus-Total-Results
 ^^^^^^^^^^^^^^^^^^^^^^
 

@@ -44,7 +44,6 @@ may also be incorporated directly in the SEARCH request body, as indicated below
 
     - X-Cantus-Include-Resources as ``"include-resources"``
     - X-Cantus-Fields as ``"fields"``
-    - X-Cantus-No-Xref as ``"no-xref"``
     - X-Cantus-Per-Page as ``"per-page"``
     - X-Cantus-Page as ``"page"``
     - X-Cantus-Sort as ``"sort"``

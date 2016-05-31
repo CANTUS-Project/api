@@ -1,12 +1,5 @@
-.. Cantus API documentation master file, created by
-   sphinx-quickstart on Mon Feb 16 23:04:23 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 API for HTTP Access to the Cantus Database
 ==========================================
-
-Check it out, it's the HTTP method :http:method:`GET` and :http:method:`SEARCH`.
 
 This is the Application Programming Interface for Cantus database-access projects. The 1.x versions
 will only allow searching and reading the database, though (pending funding) 2.x versions will add
