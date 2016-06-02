@@ -352,25 +352,29 @@ X-Cantus-Sort
 ^^^^^^^^^^^^^
 
 If the :http:header:`X-Cantus-Sort` is present in a request, it SHOULD contain a list of 2-tuples of
-field names and direction indicators (``asc`` or ``desc``) separated by a comma, each separated by a
-semicolon. (For example: ``incipit,asc`` or ``incipit,asc;feast,desc``). "Ascending" results put the
-numerical and textual results in canonical order (i.e., 1, 2, 3; and A, B, C). "Descending" is the
+field names and direction indicators (``asc`` or ``desc``) separated by a semicolon, each separated
+by a comma. (For example: ``incipit;asc`` or ``incipit;asc,feast;desc``). "Ascending" results put the
+numerical and textual results in canonical order (i.e., 1, 2, 3 or A, B, C). "Descending" is the
 opposite. Only the following characters are permitted: upper- and lower-case letters, ``_``, ``,``,
 ``;``, and spaces.
 
+.. note:: This list syntax may be unusual for developers not accustomed to HTTP. Take special note
+    that commas are used to separate larger logical groups, and semicolons to separate smaller
+    logical groups. This is the opposite of the English language!
+
+.. note:: For search queries, we recommend that user agents rely on the default relevance-based sort
+    order. This header makes sense when browsing through a category (e.g., a single resource type,
+    a single Source, and so on).
+
+For example: ``incipit;asc,description;desc``. This means "sort alphabetically by the incipit field,
+and if there is a tie then sort reverse alphabetically by the description field."
+
 If a request does not have a :http:header:`X-Cantus-Sort` header, the server MUST order results
-according to an appropriate relevance score, with the most relevant results returned first.
-
-If a field is not present in all (or any) search results, the server MAY choose a different field by
-which to sort, return a `409 Conflict <https://tools.ietf.org/html/rfc7231#section-6.5.8>`_
-response, or simply use the partially missing field regardless.
-
-For every request including a :http:header:`X-Cantus-Sort` header, the server MUST include an
-equivalent response header to indicate the actual sort field and direction used.
-
-.. note:: For search queries, clients are recommended to trust the default relevance-based sort
-    order. Cantus servers should be optimized to provide the most relevant results by default. This
-    header makes the most sense when a user wants to browse all of a category.
+according to an appropriate relevance score, with the most relevant results returned first. If a
+sort field is not present in all (or any) search results, the server MAY choose a different field
+by which to sort, return a :http:statuscode:`409` response, or continue in another way. For every
+request including a :http:header:`X-Cantus-Sort` header, the server MUST include an equivalent
+response header to indicate the actual sort field and direction used.
 
 .. _`cantus header example`:
 
