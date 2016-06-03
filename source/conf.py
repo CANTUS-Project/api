@@ -45,14 +45,17 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Cantus API'
-copyright = u'2016 Christopher Antila'
+copyright = u'2015, 2016 Christopher Antila'
+# NOTE: If someone else comes along and works on this API, please *add* your name to the copyright
+#       list. When you make a new version, the copyright is shared between all contributors. The
+#       new contributors do not replace the copyright of the previous contributors.
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = '0.2.6'
+version = '0.3.0'
 # The full version, including alpha/beta/rc tags.
 release = '{}'.format(version)
 
