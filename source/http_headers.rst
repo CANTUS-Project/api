@@ -204,7 +204,7 @@ This header is required in both the pre-flight request and the actual request.
 Example
 ^^^^^^^
 
-In this example, we assume that Abbott (the Cantus API server) is operating at ``https://abbott.cantusproject.org:8888/``
+In this example, we assume that Abbot (the Cantus API server) is operating at ``https://abbot.cantusproject.org:8888/``
 and that a user enters ``https://app.cantusproject.org/`` in their browser to access the GUI Web app.
 From the perspective of the Cantus GUI Web app's author, one single request has been submitted---the
 "actual" request---meaning the browser automatically creates the preflight request.
@@ -213,7 +213,7 @@ Preflight request:
 
 .. sourcecode:: http
 
-    OPTIONS https://abbott.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
+    OPTIONS https://abbot.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
     Access-Control-Request-Method: SEARCH
     Access-Control-Request-Headers: X-Cantus-Page, X-Cantus-Garbage-Header
     Origin: https://app.cantusproject.org/
@@ -237,7 +237,7 @@ Actual request:
 
 .. sourcecode:: http
 
-    SEARCH https://abbott.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
+    SEARCH https://abbot.cantusproject.org:8888/(browse.chants)/ HTTP/1.1
     X-Cantus-Page: 4
     Origin: https://app.cantusproject.org/
 

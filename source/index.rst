@@ -63,7 +63,7 @@ throughout the API. In general, there are three *actions* to expect for every re
     - view: to access a specific
     - search: to browse filter resources by certain criteria
 
-Requests to the root URL (i.e., ``/`` as in ``https://abbott.cantusproject.org/``) will enumerate
+Requests to the root URL (i.e., ``/`` as in ``https://abbot.cantusproject.org/``) will enumerate
 the URLs in the following way:
 
 .. sourcecode:: http
@@ -237,7 +237,7 @@ Consider the following response:
 
     HTTP/1.1 304 Not Modified
     ETag "7827ff38cb8ef147d9f5edb749a0f300dac2ebe1"
-    Server "Abbott/1.0"
+    Server "abbot/1.0"
     X-Cantus-Fields: feast differentia position genre source sequence office fest_desc cantus_id id mode full_text incipit folio
 
 With this (abbreviated) header information the client can make an informed decision about how to

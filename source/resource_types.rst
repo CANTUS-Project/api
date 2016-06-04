@@ -47,7 +47,7 @@ You submit a query about "Benedicamus patrem et filium" chants:
 
 .. sourcecode:: http
 
-    SEARCH https://abbott.uwaterloo.ca/chants/ HTTP/1.1
+    SEARCH https://abbot.uwaterloo.ca/chants/ HTTP/1.1
 
     {"query": "'benedicamus patrem et filium'"}
 
@@ -71,8 +71,8 @@ You submit a query about "Benedicamus patrem et filium" chants:
         },
         "resources": {
             ...
-            "556270": {"self": "https://abbott.uwaterloo.ca/chants/556270/"},
-            "436440": {"self": "https://abbott.uwaterloo.ca/chants/436330/"},
+            "556270": {"self": "https://abbot.uwaterloo.ca/chants/556270/"},
+            "436440": {"self": "https://abbot.uwaterloo.ca/chants/436330/"},
             "pem-8669": {"self": "http://pemdatabase.eu/musical-item/8669"},
             ...
         }
